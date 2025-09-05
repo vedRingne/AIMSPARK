@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #031048 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding: 2rem 0;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Home Page Styles */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Content Pages */
+        .content-page {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Problem Statement Page */
+        .problem-card {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+
+        .problem-card h3 {
+            color: #007bff;
+            margin-bottom: 1rem;
+        }
+
+        /* Team Page */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .dashboard-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Admin Panel */
+        /*.admin-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }*/
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Activity List Styles */
+        .activity-list {
+            margin-top: 1rem;
+        }
+
+        .activity-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-item p {
+            margin: 0;
+            color: #333;
+        }
+
+        .activity-item small {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Team member status indicator */
+        .team-member p:last-child {
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-page {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <a href="#" class="logo" onclick="showPage('home')">AIMSPARK</a>
+                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+                    <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
+                    <li><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
+                    <li><a href="#" onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
+                    <!-- <li><a href="#" onclick="showPage('admin')" class="nav-link">Admin Panel</a></li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <h1>Welcome to AIMSPARK</h1>
+                <p>Your comprehensive solution for problem-solving, team collaboration, and project management</p>
+            </section>
+
+            <div class="feature-grid">
+                <div class="feature-card" onclick="showPage('problems')">
+                    <h3>🎯 Problem Statement</h3>
+                    <p>Explore and define challenging problems that need innovative solutions</p>
+                </div>
+                <div class="feature-card" onclick="showPage('team')">
+                    <h3>👥 Create Team</h3>
+                    <p>Build and manage your dream team for tackling complex challenges</p>
+                </div>
+                <div class="feature-card" onclick="showPage('dashboard')">
+                    <h3>📊 Dashboard</h3>
+                    <p>Monitor progress, track metrics, and visualize your project's success</p>
+                </div>
+                <!-- <div class="feature-card" onclick="showPage('admin')">
+                    <h3>⚙️ Admin Panel</h3>
+                    <p>Manage users, settings, and platform configurations with ease</p>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Problem Statement Page -->
+        <div id="problems" class="page">
+            <div class="content-page">
+                <div class="page-header">
+                    <h1>Problem Statement</h1>
+                    <p>Identify, analyze, and define problems that drive innovation</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3>Current Challenge: Smart City Infrastructure</h3>
+                    <p><strong>Problem:</strong> Urban areas are struggling with traffic congestion, energy
+                        inefficiency, and waste management issues.</p>
+                    <p><strong>Impact:</strong> Affects 4.4 billion people living in urban areas worldwide, leading to
+                        economic losses and reduced quality of life.</p>
+                    <p><strong>Opportunity:</strong> Develop IoT-based solutions that can optimize traffic flow, reduce
+                        energy consumption by 30%, and improve waste collection efficiency.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3>Emerging Challenge: Digital Health Monitoring</h3>
+                    <p><strong>Problem:</strong> Remote health monitoring lacks precision and real-time intervention
+                        capabilities.</p>
+                    <p><strong>Impact:</strong> Limited access to continuous healthcare monitoring, especially in rural
+                        areas.</p>
+                    <p><strong>Opportunity:</strong> Create wearable devices with AI-powered health analytics for
+                        preventive healthcare.</p>
+                </div>
+
+                <div class="problem-card">
+                    <h3>Innovation Challenge: Sustainable Agriculture</h3>
+                    <p><strong>Problem:</strong> Climate change is affecting crop yields and food security globally.</p>
+                    <p><strong>Impact:</strong> Food production must increase by 70% by 2050 to feed the growing
+                        population.</p>
+                    <p><strong>Opportunity:</strong> Develop precision agriculture solutions using AI, sensors, and
+                        sustainable farming practices.</p>
+                </div>
+
+                <button class="btn" onclick="alert('Problem submission feature coming soon!')">Submit Problem
+                    Statement</button>
+            </div>
+        </div>
+
+        <!-- Create Team Page -->
+        <div id="team" class="page">
+            <div class="content-page">
+                <div class="page-header">
+                    <h1>Create Team</h1>
+                    <p>Build diverse, skilled teams to tackle complex challenges</p>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Team Formation Tools</h3>
+                    <button class="btn" onclick="alert('Team creation wizard launched!')">Create New Team</button>
+                    <button class="btn" onclick="alert('Skill matching system activated!')">Find Team Members</button>
+                    <button class="btn" onclick="alert('Team collaboration tools ready!')">Manage Existing
+                        Teams</button>
+                </div>
+
+                <h3>Featured Team Members</h3>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="avatar">AJ</div>
+                        <h4>Alex Johnson</h4>
+                        <p>Full Stack Developer</p>
+                        <p>React, Node.js, Python</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="avatar">SM</div>
+                        <h4>Sarah Miller</h4>
+                        <p>UI/UX Designer</p>
+                        <p>Figma, Adobe XD, Prototyping</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="avatar">DW</div>
+                        <h4>David Wilson</h4>
+                        <p>Data Scientist</p>
+                        <p>Python, ML, Analytics</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="avatar">EB</div>
+                        <h4>Emma Brown</h4>
+                        <p>Project Manager</p>
+                        <p>Agile, Scrum, Leadership</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page">
+            <div class="content-page">
+                <div class="page-header">
+                    <h1>Team Dashboard</h1>
+                    <p>Monitor your team's progress, tasks, and collaboration metrics</p>
+                </div>
+
+                <!-- Team Overview Section -->
+                <div class="admin-section">
+                    <h3>🏆 Team: Innovation Squad</h3>
+                    <p><strong>Project:</strong> Smart City Infrastructure Solution</p>
+                    <p><strong>Team Lead:</strong> Emma Brown</p>
+                    <p><strong>Created:</strong> January 15, 2025</p>
+                    <p><strong>Deadline:</strong> March 30, 2025</p>
+                </div>
+
+                <!-- Team Metrics -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>5</h3>
+                        <p>Team Members</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>12</h3>
+                        <p>Tasks Completed</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>75%</h3>
+                        <p>Project Progress</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>8</h3>
+                        <p>Days Remaining</p>
+                    </div>
+                </div>
+
+                <!-- Current Team Members -->
+                <div class="admin-section">
+                    <h3>👥 Current Team Members</h3>
+                    <div class="team-grid">
+                        <div class="team-member">
+                            <div class="avatar">EB</div>
+                            <h4>Emma Brown</h4>
+                            <p>Project Manager</p>
+                            <p><strong>Status:</strong> Online</p>
+                        </div>
+                        <div class="team-member">
+                            <div class="avatar">AJ</div>
+                            <h4>Alex Johnson</h4>
+                            <p>Full Stack Developer</p>
+                            <p><strong>Status:</strong> Working</p>
+                        </div>
+                        <div class="team-member">
+                            <div class="avatar">SM</div>
+                            <h4>Sarah Miller</h4>
+                            <p>UI/UX Designer</p>
+                            <p><strong>Status:</strong> Online</p>
+                        </div>
+                        <div class="team-member">
+                            <div class="avatar">DW</div>
+                            <h4>David Wilson</h4>
+                            <p>Data Scientist</p>
+                            <p><strong>Status:</strong> Offline</p>
+                        </div>
+                        <div class="team-member">
+                            <div class="avatar">MK</div>
+                            <h4>Mike Chen</h4>
+                            <p>Backend Developer</p>
+                            <p><strong>Status:</strong> Working</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="admin-section">
+                    <h3>📋 Recent Team Activity</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <p><strong>Alex Johnson</strong> completed "API Integration" task</p>
+                            <small>2 hours ago</small>
+                        </div>
+                        <div class="activity-item">
+                            <p><strong>Sarah Miller</strong> uploaded new UI mockups</p>
+                            <small>4 hours ago</small>
+                        </div>
+                        <div class="activity-item">
+                            <p><strong>Emma Brown</strong> scheduled team meeting for tomorrow</p>
+                            <small>6 hours ago</small>
+                        </div>
+                        <div class="activity-item">
+                            <p><strong>David Wilson</strong> shared data analysis report</p>
+                            <small>1 day ago</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Team Actions -->
+                <div class="admin-section">
+                    <h3>🚀 Team Actions</h3>
+                    <button class="btn" onclick="alert('Opening team chat...')">Team Chat</button>
+                    <button class="btn" onclick="alert('Scheduling team meeting...')">Schedule Meeting</button>
+                    <button class="btn" onclick="alert('Creating new task...')">Add Task</button>
+                    <button class="btn" onclick="alert('Generating team report...')">Team Report</button>
+                    <button class="btn" onclick="alert('Inviting new member...')">Invite Member</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel Page
+        <div id="admin" class="page">
+            <div class="content-page">
+                <div class="page-header">
+                    <h1>Admin Panel</h1>
+                    <p>Manage platform settings, users, and system configurations</p>
+                </div>
+
+                <div class="admin-section">
+                    <h3>User Management</h3>
+                    <button class="btn" onclick="alert('User management system opened!')">Manage Users</button>
+                    <button class="btn" onclick="alert('Role assignment panel ready!')">Assign Roles</button>
+                    <button class="btn" onclick="alert('Permission settings configured!')">Set Permissions</button>
+                </div>
+
+                <div class="admin-section">
+                    <h3>System Settings</h3>
+                    <button class="btn" onclick="alert('Platform configuration updated!')">Platform Config</button>
+                    <button class="btn" onclick="alert('Security settings reviewed!')">Security Settings</button>
+                    <button class="btn" onclick="alert('Backup system activated!')">Backup & Restore</button>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Analytics & Monitoring</h3>
+                    <button class="btn" onclick="alert('System logs accessed!')">View Logs</button>
+                    <button class="btn" onclick="alert('Performance metrics loaded!')">Performance Monitor</button>
+                    <button class="btn" onclick="alert('Analytics dashboard ready!')">Analytics Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Find and activate the corresponding nav link
+            const activeLink = document.querySelector(`[onclick="showPage('${pageId}')"].nav-link`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            // Close mobile menu if open
+            const navLinksContainer = document.getElementById('navLinks');
+            navLinksContainer.classList.remove('show');
+        }
+
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('show');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function (event) {
+            const nav = document.querySelector('nav');
+            const navLinks = document.getElementById('navLinks');
+
+            if (!nav.contains(event.target)) {
+                navLinks.classList.remove('show');
+            }
+        });
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animate feature cards on load
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'fadeIn 0.6s ease-in forwards';
+            });
+        });
+    </script>
+</body>
+
+</html>
