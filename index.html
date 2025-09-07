@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Platform Hub</title>
+    <title>AIMSPARK 2025 - Registration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.3/umd/supabase.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,10 +13,10 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #031048 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #333;
         }
 
         .container {
@@ -26,14 +26,14 @@
         }
 
         /* Navigation */
-        nav {
-            background: rgba(255, 255, 255, 0.1);
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .nav-content {
@@ -43,10 +43,9 @@
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
         }
 
         .nav-links {
@@ -56,635 +55,927 @@
         }
 
         .nav-links a {
-            color: white;
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
         }
 
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #667eea;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Auth Forms */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .auth-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .auth-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .auth-btn:hover {
             transform: translateY(-2px);
         }
 
-        .nav-links a.active {
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        .auth-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
-        /* Page Content */
+        .auth-switch {
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+            background: rgba(255, 255, 255, 0.9);
+            min-height: calc(100vh - 80px);
+        }
+
         .page {
             display: none;
-            min-height: calc(100vh - 80px);
-            padding: 2rem 0;
         }
 
         .page.active {
             display: block;
-            animation: fadeIn 0.5s ease-in;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Home Page Styles */
         .hero {
             text-align: center;
             padding: 4rem 0;
-            color: white;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
-            background: linear-gradient(45deg, #fff, #e0e0e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #333;
         }
 
         .hero p {
             font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 2rem;
         }
 
-        .feature-grid {
+        .cta-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
+            padding: 2rem 0;
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
+            background: white;
             padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-            color: white;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            transition: transform 0.3s;
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card p {
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-
-        /* Content Pages */
-        .content-page {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 3rem;
-            margin: 2rem 0;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .page-header p {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        /* Problem Statement Page */
-        .problem-card {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 2rem;
-            margin: 2rem 0;
-            border-radius: 10px;
-        }
-
-        .problem-card h3 {
-            color: #007bff;
-            margin-bottom: 1rem;
-        }
-
-        /* Team Page */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .team-member {
-            text-align: center;
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 15px;
-            transition: transform 0.3s ease;
-            position: relative;
-        }
-
-        .team-member:hover {
             transform: translateY(-5px);
         }
 
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            font-weight: bold;
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
 
-        /* Dashboard */
-        .dashboard-grid {
+        .problem-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
-        .dashboard-card {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
+        .problem-card {
+            background: white;
             padding: 2rem;
             border-radius: 15px;
-            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
         }
 
-        .dashboard-card h3 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Admin Panel */
-        /*.admin-section {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-        }*/
-
-        .btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            margin: 0.5rem;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Activity List Styles */
-        .activity-list {
-            margin-top: 1rem;
-        }
-
-        .activity-item {
+        .team-form {
             background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            border-left: 3px solid #667eea;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 2rem auto;
         }
 
-        .activity-item p {
-            margin: 0;
+        .team-form h2 {
+            margin-bottom: 1.5rem;
             color: #333;
         }
 
-        .activity-item small {
-            color: #666;
-            font-size: 0.9rem;
+        .team-form .form-group {
+            margin-bottom: 1.5rem;
         }
 
-        /* Team member status indicator */
-        .team-member p:last-child {
-            font-size: 0.9rem;
+        .team-form input,
+        .team-form textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1rem;
         }
 
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .content-page {
-                padding: 2rem 1rem;
-            }
+        .team-form textarea {
+            height: 100px;
+            resize: vertical;
         }
 
-        /* Mobile menu toggle */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
+        .member-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .member-input input {
+            flex: 1;
+        }
+
+        .add-member-btn,
+        .remove-member-btn {
+            background: #667eea;
             color: white;
-            font-size: 1.5rem;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
             cursor: pointer;
         }
 
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
+        .remove-member-btn {
+            background: #ff4757;
+        }
 
+        .team-dashboard {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .team-info {
+            border: 2px solid #667eea;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            background: #f8f9ff;
+        }
+
+        .member-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .member-list li {
+            background: #f5f5f5;
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .instructions {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .instructions h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
             .nav-links {
                 display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                padding: 1rem;
             }
 
-            .nav-links.show {
-                display: flex;
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
-
 <body>
-    <nav>
-        <div class="container">
-            <div class="nav-content">
-                <a href="#" class="logo" onclick="showPage('home')">AIMSPARK</a>
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
-                    <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
-                    <li><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
-                    <li><a href="#" onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
-                    <!-- <li><a href="#" onclick="showPage('admin')" class="nav-link">Admin Panel</a></li> -->
-                </ul>
+    <!-- Authentication Section -->
+    <div id="authSection" class="auth-container">
+        <div class="auth-card">
+            <div id="loginForm">
+                <h2 class="auth-title">Welcome to AIMSPARK</h2>
+                <p class="auth-subtitle">Sign in to your hackathon account</p>
+                <div id="authAlert"></div>
+                <form>
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="auth-btn" id="loginBtn">Sign In</button>
+                </form>
+                <p>Don't have an account? <span class="auth-switch" id="showSignup">Sign up here</span></p>
+            </div>
+
+            <div id="signupForm" class="hidden">
+                <h2 class="auth-title">Join AIMSPARK 2025</h2>
+                <p class="auth-subtitle">Create your account to get started</p>
+                <div id="signupAlert"></div>
+                <form>
+                    <div class="form-group">
+                        <label for="signupName">Full Name</label>
+                        <input type="text" id="signupName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" required>
+                    </div>
+                    <button type="submit" class="auth-btn" id="signupBtn">Create Account</button>
+                </form>
+                <p>Already have an account? <span class="auth-switch" id="showLogin">Sign in here</span></p>
             </div>
         </div>
-    </nav>
+    </div>
 
-    <div class="container">
-        <!-- Home Page -->
-        <div id="home" class="page active">
-            <section class="hero">
-                <h1>Welcome to AIMSPARK</h1>
-                <p>Your comprehensive solution for problem-solving, team collaboration, and project management</p>
-            </section>
-
-            <div class="feature-grid">
-                <div class="feature-card" onclick="showPage('problems')">
-                    <h3>🎯 Problem Statement</h3>
-                    <p>Explore and define challenging problems that need innovative solutions</p>
-                </div>
-                <div class="feature-card" onclick="showPage('team')">
-                    <h3>👥 Create Team</h3>
-                    <p>Build and manage your dream team for tackling complex challenges</p>
-                </div>
-                <div class="feature-card" onclick="showPage('dashboard')">
-                    <h3>📊 Dashboard</h3>
-                    <p>Monitor progress, track metrics, and visualize your project's success</p>
-                </div>
-                <!-- <div class="feature-card" onclick="showPage('admin')">
-                    <h3>⚙️ Admin Panel</h3>
-                    <p>Manage users, settings, and platform configurations with ease</p>
-                </div> -->
-            </div>
-        </div>
-
-        <!-- Problem Statement Page -->
-        <div id="problems" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Problem Statement</h1>
-                    <p>Identify, analyze, and define problems that drive innovation</p>
-                </div>
-
-                <div class="problem-card">
-                    <h3>Current Challenge: Smart City Infrastructure</h3>
-                    <p><strong>Problem:</strong> Urban areas are struggling with traffic congestion, energy
-                        inefficiency, and waste management issues.</p>
-                    <p><strong>Impact:</strong> Affects 4.4 billion people living in urban areas worldwide, leading to
-                        economic losses and reduced quality of life.</p>
-                    <p><strong>Opportunity:</strong> Develop IoT-based solutions that can optimize traffic flow, reduce
-                        energy consumption by 30%, and improve waste collection efficiency.</p>
-                </div>
-
-                <div class="problem-card">
-                    <h3>Emerging Challenge: Digital Health Monitoring</h3>
-                    <p><strong>Problem:</strong> Remote health monitoring lacks precision and real-time intervention
-                        capabilities.</p>
-                    <p><strong>Impact:</strong> Limited access to continuous healthcare monitoring, especially in rural
-                        areas.</p>
-                    <p><strong>Opportunity:</strong> Create wearable devices with AI-powered health analytics for
-                        preventive healthcare.</p>
-                </div>
-
-                <div class="problem-card">
-                    <h3>Innovation Challenge: Sustainable Agriculture</h3>
-                    <p><strong>Problem:</strong> Climate change is affecting crop yields and food security globally.</p>
-                    <p><strong>Impact:</strong> Food production must increase by 70% by 2050 to feed the growing
-                        population.</p>
-                    <p><strong>Opportunity:</strong> Develop precision agriculture solutions using AI, sensors, and
-                        sustainable farming practices.</p>
-                </div>
-
-                <button class="btn" onclick="alert('Problem submission feature coming soon!')">Submit Problem
-                    Statement</button>
-            </div>
-        </div>
-
-        <!-- Create Team Page -->
-        <div id="team" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Create Team</h1>
-                    <p>Build diverse, skilled teams to tackle complex challenges</p>
-                </div>
-
-                <div class="admin-section">
-                    <h3>Team Formation Tools</h3>
-                    <button class="btn" onclick="alert('Team creation wizard launched!')">Create New Team</button>
-                    <button class="btn" onclick="alert('Skill matching system activated!')">Find Team Members</button>
-                    <button class="btn" onclick="alert('Team collaboration tools ready!')">Manage Existing
-                        Teams</button>
-                </div>
-
-                <h3>Featured Team Members</h3>
-                <div class="team-grid">
-                    <div class="team-member">
-                        <div class="avatar">AJ</div>
-                        <h4>Alex Johnson</h4>
-                        <p>Full Stack Developer</p>
-                        <p>React, Node.js, Python</p>
-                    </div>
-                    <div class="team-member">
-                        <div class="avatar">SM</div>
-                        <h4>Sarah Miller</h4>
-                        <p>UI/UX Designer</p>
-                        <p>Figma, Adobe XD, Prototyping</p>
-                    </div>
-                    <div class="team-member">
-                        <div class="avatar">DW</div>
-                        <h4>David Wilson</h4>
-                        <p>Data Scientist</p>
-                        <p>Python, ML, Analytics</p>
-                    </div>
-                    <div class="team-member">
-                        <div class="avatar">EB</div>
-                        <h4>Emma Brown</h4>
-                        <p>Project Manager</p>
-                        <p>Agile, Scrum, Leadership</p>
+    <!-- Main Website -->
+    <div id="mainWebsite" class="hidden">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-content">
+                    <div class="logo">AIMSPARK 2025</div>
+                    <ul class="nav-links">
+                        <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                        <li><a href="#" class="nav-link" data-page="problems">Problems</a></li>
+                        <li><a href="#" class="nav-link" data-page="createTeam">Create Team</a></li>
+                        <li><a href="#" class="nav-link" data-page="dashboard">Dashboard</a></li>
+                        <li><a href="#" class="nav-link" data-page="instructions">Instructions</a></li>
+                    </ul>
+                    <div class="user-info">
+                        <span id="userEmail"></span>
+                        <button class="logout-btn" id="logoutBtn">Logout</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </nav>
 
-        <!-- Dashboard Page -->
-        <div id="dashboard" class="page">
-            <div class="content-page">
-                <div class="page-header">
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Home Page -->
+                <div id="home" class="page active">
+                    <div class="hero">
+                        <h1>AIMSPARK 2025</h1>
+                        <p>Join the biggest hackathon of the year! Build innovative solutions, connect with amazing developers, and compete for incredible prizes.</p>
+                        <a href="#" class="cta-btn nav-link" data-page="problems">Explore Problems</a>
+                    </div>
+                    <div class="features">
+                        <!-- <div class="feature-card">
+                            <div class="feature-icon">🏆</div>
+                            <h3>$50,000 in Prizes</h3>
+                            <p>Compete for cash prizes, internships, and exciting opportunities with leading tech companies.</p>
+                        </div> -->
+                        <div class="feature-card">
+                            <div class="feature-icon">🤝</div>
+                            <h3>Network & Learn</h3>
+                            <p>Connect with fellow developers, mentors, and industry professionals from around the world.</p>
+                        </div>
+                        <!-- <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3>48 Hour Challenge</h3>
+                            <p>Build amazing projects in just 48 hours with your team and showcase your skills.</p>
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- Problem Statements Page -->
+                <div id="problems" class="page">
+                    <h1>Problem Statements</h1>
+                    <p>Choose from these exciting challenges and build solutions that matter:</p>
+                    <div class="problem-grid">
+                        <div class="problem-card">
+                            <h3>🌱 Sustainable Tech Solutions</h3>
+                            <p><strong>Challenge:</strong> Create technology solutions that address environmental challenges and promote sustainability.</p>
+                            <p><strong>Focus Areas:</strong> Clean energy, waste reduction, carbon footprint tracking, sustainable agriculture</p>
+                            <p><strong>Prize:</strong> $15,000</p>
+                        </div>
+                        <div class="problem-card">
+                            <h3>🏥 Healthcare Innovation</h3>
+                            <p><strong>Challenge:</strong> Develop digital health solutions that improve patient care and accessibility.</p>
+                            <p><strong>Focus Areas:</strong> Telemedicine, mental health, medical data analysis, accessibility tools</p>
+                            <p><strong>Prize:</strong> $12,000</p>
+                        </div>
+                        <div class="problem-card">
+                            <h3>🎓 Education Technology</h3>
+                            <p><strong>Challenge:</strong> Build platforms and tools that enhance learning experiences and educational outcomes.</p>
+                            <p><strong>Focus Areas:</strong> Online learning, skill assessment, educational games, accessibility</p>
+                            <p><strong>Prize:</strong> $10,000</p>
+                        </div>
+                        <div class="problem-card">
+                            <h3>🏙️ Innovation</h3>
+                            <!-- <p><strong>Challenge:</strong> Design solutions for urban challenges using IoT, AI, and data analytics.</p>
+                            <p><strong>Focus Areas:</strong> Traffic management, public safety, energy efficiency, citizen services</p>
+                            <p><strong>Prize:</strong> $13,000</p> -->
+                            <p>Bring your own project</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create Team Page -->
+                <div id="createTeam" class="page">
+                    <h1>Create Your Team</h1>
+                    <div class="team-form">
+                        <h2>Team Registration</h2>
+                        <div id="teamAlert"></div>
+                        <form id="teamForm">
+                            <div class="form-group">
+                                <label for="teamName">Team Name</label>
+                                <input type="text" id="teamName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="problemStatement">Selected Problem Statement</label>
+                                <select id="problemStatement" required>
+                                    <option value="">Choose a problem statement</option>
+                                    <option value="sustainable">Sustainable Tech Solutions</option>
+                                    <option value="healthcare">Healthcare Innovation</option>
+                                    <option value="education">Education Technology</option>
+                                    <option value="smartcities">Innovation</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="teamDescription">Team Description</label>
+                                <textarea id="teamDescription" placeholder="Describe your team's skills and goals..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Team Members (including you)</label>
+                                <div id="membersList">
+                                    <div class="member-input">
+                                        <input type="email" placeholder="Member email" required>
+                                        <button type="button" class="add-member-btn" onclick="addMember()">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="auth-btn">Create Team</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Team Dashboard -->
+                <div id="dashboard" class="page">
                     <h1>Team Dashboard</h1>
-                    <p>Monitor your team's progress, tasks, and collaboration metrics</p>
-                </div>
-
-                <!-- Team Overview Section -->
-                <div class="admin-section">
-                    <h3>🏆 Team: Innovation Squad</h3>
-                    <p><strong>Project:</strong> Smart City Infrastructure Solution</p>
-                    <p><strong>Team Lead:</strong> Emma Brown</p>
-                    <p><strong>Created:</strong> January 15, 2025</p>
-                    <p><strong>Deadline:</strong> March 30, 2025</p>
-                </div>
-
-                <!-- Team Metrics -->
-                <div class="dashboard-grid">
-                    <div class="dashboard-card">
-                        <h3>5</h3>
-                        <p>Team Members</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>12</h3>
-                        <p>Tasks Completed</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>75%</h3>
-                        <p>Project Progress</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>8</h3>
-                        <p>Days Remaining</p>
-                    </div>
-                </div>
-
-                <!-- Current Team Members -->
-                <div class="admin-section">
-                    <h3>👥 Current Team Members</h3>
-                    <div class="team-grid">
-                        <div class="team-member">
-                            <div class="avatar">EB</div>
-                            <h4>Emma Brown</h4>
-                            <p>Project Manager</p>
-                            <p><strong>Status:</strong> Online</p>
-                        </div>
-                        <div class="team-member">
-                            <div class="avatar">AJ</div>
-                            <h4>Alex Johnson</h4>
-                            <p>Full Stack Developer</p>
-                            <p><strong>Status:</strong> Working</p>
-                        </div>
-                        <div class="team-member">
-                            <div class="avatar">SM</div>
-                            <h4>Sarah Miller</h4>
-                            <p>UI/UX Designer</p>
-                            <p><strong>Status:</strong> Online</p>
-                        </div>
-                        <div class="team-member">
-                            <div class="avatar">DW</div>
-                            <h4>David Wilson</h4>
-                            <p>Data Scientist</p>
-                            <p><strong>Status:</strong> Offline</p>
-                        </div>
-                        <div class="team-member">
-                            <div class="avatar">MK</div>
-                            <h4>Mike Chen</h4>
-                            <p>Backend Developer</p>
-                            <p><strong>Status:</strong> Working</p>
+                    <div class="team-dashboard">
+                        <div id="teamStatus">
+                            <div id="noTeam">
+                                <h2>No Team Found</h2>
+                                <p>You haven't created or joined a team yet. <a href="#" class="nav-link" data-page="createTeam">Create a team</a> to get started!</p>
+                            </div>
+                            <div id="hasTeam" class="hidden">
+                                <div class="team-info">
+                                    <h2 id="dashboardTeamName">Team Name</h2>
+                                    <p><strong>Problem Statement:</strong> <span id="dashboardProblem"></span></p>
+                                    <p><strong>Description:</strong> <span id="dashboardDescription"></span></p>
+                                    <p><strong>Team Leader:</strong> <span id="dashboardLeader"></span></p>
+                                </div>
+                                <h3>Team Members</h3>
+                                <ul id="dashboardMembers" class="member-list"></ul>
+                                <div style="margin-top: 2rem;">
+                                    <h3>Submission</h3>
+                                    <p>Project submission will be available 24 hours before the deadline.</p>
+                                    <button class="auth-btn" disabled>Submit Project (Coming Soon)</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
-                <div class="admin-section">
-                    <h3>📋 Recent Team Activity</h3>
-                    <div class="activity-list">
-                        <div class="activity-item">
-                            <p><strong>Alex Johnson</strong> completed "API Integration" task</p>
-                            <small>2 hours ago</small>
-                        </div>
-                        <div class="activity-item">
-                            <p><strong>Sarah Miller</strong> uploaded new UI mockups</p>
-                            <small>4 hours ago</small>
-                        </div>
-                        <div class="activity-item">
-                            <p><strong>Emma Brown</strong> scheduled team meeting for tomorrow</p>
-                            <small>6 hours ago</small>
-                        </div>
-                        <div class="activity-item">
-                            <p><strong>David Wilson</strong> shared data analysis report</p>
-                            <small>1 day ago</small>
-                        </div>
-                    </div>
-                </div>
+                <!-- Instructions Page -->
+                <div id="instructions" class="page">
+                    <h1>Hackathon Instructions</h1>
+                    <div class="instructions">
+                        <h2>📋 Registration & Team Formation</h2>
+                        <ol>
+                            <li>Create your account and complete your profile</li>
+                            <li>Form a team of 2-4 members or join an existing team</li>
+                            <li>Select one problem statement from the available options</li>
+                            <li>Submit your team registration before the deadline</li>
+                        </ol>
 
-                <!-- Quick Team Actions -->
-                <div class="admin-section">
-                    <h3>🚀 Team Actions</h3>
-                    <button class="btn" onclick="alert('Opening team chat...')">Team Chat</button>
-                    <button class="btn" onclick="alert('Scheduling team meeting...')">Schedule Meeting</button>
-                    <button class="btn" onclick="alert('Creating new task...')">Add Task</button>
-                    <button class="btn" onclick="alert('Generating team report...')">Team Report</button>
-                    <button class="btn" onclick="alert('Inviting new member...')">Invite Member</button>
+                        <!-- <h2>⚡ Hackathon Timeline</h2>
+                        <ol>
+                            <li><strong>Registration:</strong> March 1-15, 2025</li>
+                            <li><strong>Team Formation:</strong> March 16-20, 2025</li>
+                            <li><strong>Hackathon Event:</strong> March 22-24, 2025 (48 hours)</li>
+                            <li><strong>Submission Deadline:</strong> March 24, 2025, 6:00 PM</li>
+                            <li><strong>Judging & Results:</strong> March 25-26, 2025</li>
+                        </ol> -->
+
+                        <h2>🔧 Technical Requirements</h2>
+                        <ol>
+                            <li>Projects must be built during the hackathon period</li>
+                            <li>Use any programming language or technology stack</li>
+                            <li>Code must be hosted on GitHub with proper documentation</li>
+                            <li>Include a demo video (max 3 minutes) showcasing your solution</li>
+                            <li>Prepare a presentation for the judging panel</li>
+                        </ol>
+
+                        <h2>📝 Submission Guidelines</h2>
+                        <ol>
+                            <li>Submit your project through the team dashboard</li>
+                            <li>Include: GitHub repository link, demo video, and presentation slides</li>
+                            <li>Write a clear README with installation and usage instructions</li>
+                            <li>Ensure your project addresses the chosen problem statement</li>
+                        </ol>
+
+                        <!-- <h2>🏆 Judging Criteria</h2>
+                        <ol>
+                            <li><strong>Innovation (25%):</strong> Creativity and uniqueness of the solution</li>
+                            <li><strong>Technical Implementation (25%):</strong> Code quality and technical complexity</li>
+                            <li><strong>Impact (25%):</strong> Potential real-world impact and problem-solving effectiveness</li>
+                            <li><strong>Presentation (25%):</strong> Quality of demo, documentation, and presentation</li>
+                        </ol> -->
+
+                        <h2>📞 Support & Resources</h2>
+                        <ol>
+                            <li>Discord server for real-time communication and support</li>
+                            <li>Mentorship sessions available throughout the event</li>
+                            <li>Technical workshops on popular frameworks and tools</li>
+                            <li>24/7 support team for technical and logistical issues</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Admin Panel Page
-        <div id="admin" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Admin Panel</h1>
-                    <p>Manage platform settings, users, and system configurations</p>
-                </div>
-
-                <div class="admin-section">
-                    <h3>User Management</h3>
-                    <button class="btn" onclick="alert('User management system opened!')">Manage Users</button>
-                    <button class="btn" onclick="alert('Role assignment panel ready!')">Assign Roles</button>
-                    <button class="btn" onclick="alert('Permission settings configured!')">Set Permissions</button>
-                </div>
-
-                <div class="admin-section">
-                    <h3>System Settings</h3>
-                    <button class="btn" onclick="alert('Platform configuration updated!')">Platform Config</button>
-                    <button class="btn" onclick="alert('Security settings reviewed!')">Security Settings</button>
-                    <button class="btn" onclick="alert('Backup system activated!')">Backup & Restore</button>
-                </div>
-
-                <div class="admin-section">
-                    <h3>Analytics & Monitoring</h3>
-                    <button class="btn" onclick="alert('System logs accessed!')">View Logs</button>
-                    <button class="btn" onclick="alert('Performance metrics loaded!')">Performance Monitor</button>
-                    <button class="btn" onclick="alert('Analytics dashboard ready!')">Analytics Dashboard</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
+        </main>
+    </div>
 
     <script>
-        function showPage(pageId) {
-            // Hide all pages
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => {
-                page.classList.remove('active');
+        // Initialize Supabase client
+        const supabaseUrl = 'https://pfgnanvvzsdldjpdcbjy.supabase.co'; // Replace with your Supabase URL
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBmZ25hbnZ2enNkbGRqcGRjYmp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxODI0MjMsImV4cCI6MjA3Mjc1ODQyM30.wEADUYqOpiCIiLAnCFMJ8btUy21UxH2aJSdmZ_rap6U'; // Replace with your Supabase anon key
+        
+        // For demo purposes, we'll simulate auth without actual Supabase
+        let currentUser = null;
+        let teams = {};
+
+        // DOM Elements
+        const authSection = document.getElementById('authSection');
+        const mainWebsite = document.getElementById('mainWebsite');
+        const loginForm = document.getElementById('loginForm');
+        const signupForm = document.getElementById('signupForm');
+        const showSignupBtn = document.getElementById('showSignup');
+        const showLoginBtn = document.getElementById('showLogin');
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userEmail = document.getElementById('userEmail');
+
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+
+        // Team form
+        const teamForm = document.getElementById('teamForm');
+
+        // Initialize app
+        function init() {
+            // Check if user is already logged in (simulate with localStorage)
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                showMainWebsite();
+            }
+
+            // Event listeners
+            showSignupBtn.addEventListener('click', () => {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
             });
 
-            // Show selected page
-            document.getElementById(pageId).classList.add('active');
+            showLoginBtn.addEventListener('click', () => {
+                signupForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+            });
 
-            // Update active nav link
-            const navLinks = document.querySelectorAll('.nav-link');
+            loginForm.addEventListener('submit', handleLogin);
+            signupForm.addEventListener('submit', handleSignup);
+            logoutBtn.addEventListener('click', handleLogout);
+            teamForm.addEventListener('submit', handleTeamCreation);
+
+            // Navigation
             navLinks.forEach(link => {
-                link.classList.remove('active');
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetPage = link.getAttribute('data-page');
+                    if (targetPage) {
+                        showPage(targetPage);
+                    }
+                });
             });
-
-            // Find and activate the corresponding nav link
-            const activeLink = document.querySelector(`[onclick="showPage('${pageId}')"].nav-link`);
-            if (activeLink) {
-                activeLink.classList.add('active');
-            }
-
-            // Close mobile menu if open
-            const navLinksContainer = document.getElementById('navLinks');
-            navLinksContainer.classList.remove('show');
         }
 
-        function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('show');
+        // Authentication functions
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simulate authentication
+            if (email && password) {
+                currentUser = { email, id: generateId() };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showMainWebsite();
+                showAlert('authAlert', 'Login successful!', 'success');
+            } else {
+                showAlert('authAlert', 'Please fill in all fields', 'error');
+            }
         }
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function (event) {
-            const nav = document.querySelector('nav');
-            const navLinks = document.getElementById('navLinks');
+        async function handleSignup(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
 
-            if (!nav.contains(event.target)) {
-                navLinks.classList.remove('show');
+            // Simulate authentication
+            if (name && email && password) {
+                currentUser = { email, name, id: generateId() };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showMainWebsite();
+                showAlert('signupAlert', 'Account created successfully!', 'success');
+            } else {
+                showAlert('signupAlert', 'Please fill in all fields', 'error');
             }
-        });
+        }
 
-        // Add some interactive animations
-        document.addEventListener('DOMContentLoaded', function () {
-            // Animate feature cards on load
-            const featureCards = document.querySelectorAll('.feature-card');
-            featureCards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.style.animation = 'fadeIn 0.6s ease-in forwards';
-            });
-        });
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('userTeam');
+            authSection.classList.remove('hidden');
+            mainWebsite.classList.add('hidden');
+        }
+
+        function showMainWebsite() {
+            authSection.classList.add('hidden');
+            mainWebsite.classList.remove('hidden');
+            
+            // Display user email from appropriate source
+            const displayEmail = currentUser.email || currentUser.user_metadata?.email || 'User';
+            userEmail.textContent = displayEmail;
+            loadTeamDashboard();
+        }
+
+        // Navigation
+        function showPage(pageId) {
+            pages.forEach(page => page.classList.remove('active'));
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+        }
+
+        // Team management with Supabase integration
+        function addMember() {
+            const membersList = document.getElementById('membersList');
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'member-input';
+            memberDiv.innerHTML = `
+                <input type="email" placeholder="Member email" required>
+                <button type="button" class="remove-member-btn" onclick="removeMember(this)">-</button>
+            `;
+            membersList.appendChild(memberDiv);
+        }
+
+        function removeMember(btn) {
+            const membersList = document.getElementById('membersList');
+            if (membersList.children.length > 1) {
+                btn.parentElement.remove();
+            }
+        }
+
+        async function handleTeamCreation(e) {
+            e.preventDefault();
+            
+            const teamName = document.getElementById('teamName').value;
+            const problemStatement = document.getElementById('problemStatement').value;
+            const teamDescription = document.getElementById('teamDescription').value;
+            
+            const memberInputs = document.querySelectorAll('#membersList input[type="email"]');
+            const members = Array.from(memberInputs).map(input => input.value).filter(email => email);
+            
+            if (members.length > 4) {
+                showAlert('teamAlert', 'Maximum 4 members allowed per team', 'error');
+                return;
+            }
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating Team...';
+
+            try {
+                const team = {
+                    name: teamName,
+                    problem_statement: problemStatement,
+                    description: teamDescription,
+                    leader_id: currentUser.id,
+                    leader_email: currentUser.email,
+                    members: members,
+                    created_at: new Date().toISOString()
+                };
+
+                if (typeof supabase !== 'undefined' && supabaseUrl !== 'YOUR_SUPABASE_URL') {
+                    // Real Supabase database insertion
+                    const { data, error } = await supabase
+                        .from('teams')
+                        .insert([team])
+                        .select()
+                        .single();
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    // Store team ID for quick access
+                    localStorage.setItem('userTeamId', data.id);
+                    showAlert('teamAlert', 'Team created successfully!', 'success');
+                } else {
+                    // Fallback to localStorage
+                    team.id = generateId();
+                    localStorage.setItem('userTeam', JSON.stringify(team));
+                    showAlert('teamAlert', 'Team created successfully! (Demo mode)', 'success');
+                }
+
+                // Reset form
+                teamForm.reset();
+                document.getElementById('membersList').innerHTML = `
+                    <div class="member-input">
+                        <input type="email" placeholder="Member email" required>
+                        <button type="button" class="add-member-btn" onclick="addMember()">+</button>
+                    </div>
+                `;
+
+                // Update dashboard
+                loadTeamDashboard();
+            } catch (error) {
+                showAlert('teamAlert', `Error creating team: ${error.message}`, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Team';
+            }
+        }
+
+        async function loadTeamDashboard() {
+            const noTeamDiv = document.getElementById('noTeam');
+            const hasTeamDiv = document.getElementById('hasTeam');
+
+            try {
+                let team = null;
+
+                if (typeof supabase !== 'undefined' && supabaseUrl !== 'YOUR_SUPABASE_URL') {
+                    // Real Supabase data loading
+                    const { data, error } = await supabase
+                        .from('teams')
+                        .select('*')
+                        .eq('leader_id', currentUser.id)
+                        .single();
+
+                    if (error && error.code !== 'PGRST116') { // PGRST116 is "not found"
+                        throw error;
+                    }
+
+                    team = data;
+                } else {
+                    // Fallback to localStorage
+                    const userTeam = localStorage.getItem('userTeam');
+                    if (userTeam) {
+                        team = JSON.parse(userTeam);
+                    }
+                }
+
+                if (team) {
+                    noTeamDiv.classList.add('hidden');
+                    hasTeamDiv.classList.remove('hidden');
+
+                    // Populate team info
+                    document.getElementById('dashboardTeamName').textContent = team.name;
+                    document.getElementById('dashboardProblem').textContent = getProblemTitle(team.problem_statement || team.problem);
+                    document.getElementById('dashboardDescription').textContent = team.description;
+                    document.getElementById('dashboardLeader').textContent = team.leader_email || team.leader;
+
+                    // Populate members list
+                    const membersList = document.getElementById('dashboardMembers');
+                    membersList.innerHTML = '';
+                    
+                    if (team.members && team.members.length > 0) {
+                        team.members.forEach((member, index) => {
+                            const li = document.createElement('li');
+                            const isLeader = member === (team.leader_email || team.leader);
+                            li.innerHTML = `
+                                <span>${member} ${isLeader ? '(Leader)' : ''}</span>
+                                <span>${isLeader ? '👑' : '👤'}</span>
+                            `;
+                            membersList.appendChild(li);
+                        });
+                    } else {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <span>${team.leader_email || team.leader} (Leader)</span>
+                            <span>👑</span>
+                        `;
+                        membersList.appendChild(li);
+                    }
+                } else {
+                    noTeamDiv.classList.remove('hidden');
+                    hasTeamDiv.classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading team dashboard:', error);
+                showAlert('teamAlert', `Error loading team data: ${error.message}`, 'error');
+            }
+        }
+
+        function getProblemTitle(problemKey) {
+            const problems = {
+                'sustainable': 'Sustainable Tech Solutions',
+                'healthcare': 'Healthcare Innovation',
+                'education': 'Education Technology',
+                'smartcities': 'Smart Cities'
+            };
+            return problems[problemKey] || problemKey;
+        }
+
+        // Utility functions
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function showAlert(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `<div class="alert ${type}">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-
 </html>
