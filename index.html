@@ -365,6 +365,7 @@
                 <a href="#" class="logo" onclick="showPage('home')">AIMSPARK</a>
                 <button class="menu-toggle" onclick="toggleMenu()">☰</button>
                 <ul class="nav-links" id="navLinks">
+                     <li id="name"></li>
                     <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
                     <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
                     <li><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
@@ -633,6 +634,7 @@
     </div> -->
 
     <script>
+        
         function showPage(pageId) {
             // Hide all pages
             const pages = document.querySelectorAll('.page');
@@ -685,6 +687,26 @@
             });
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+  const SUPABASE_URL = 'https://ulhjptxfzgsbepwtjqro.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function loadUser() {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (user) {
+      const username = user.user_metadata?.full_name || "";
+      document.getElementById("name").textContent = "👋 " + username;
+    } else {
+      document.getElementById("name").textContent = "Guest";
+    }
+  }
+
+  loadUser();
+</script>
+
 </body>
 
 </html>
