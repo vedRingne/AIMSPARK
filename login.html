@@ -400,18 +400,7 @@
         </form>
 
         <!-- Divider -->
-        <div class="divider">Or continue with</div>
-
-        <!-- Social Login -->
-        <div class="social-login">
-            <button class="social-btn google-btn" onclick="socialLogin('google')">
-                📧 Google
-            </button>
-            <button class="social-btn github-btn" onclick="socialLogin('github')">
-                🔗 GitHub
-            </button>
-        </div>
-
+       
         <!-- Sign up link -->
         <div class="signup-link">
             Don't have an account? <a href="#" onclick="showSignup()">Sign up here</a>
@@ -463,8 +452,8 @@
                     
                     // Redirect after 2 seconds (replace with actual redirect)
                     setTimeout(() => {
-                        alert('Redirecting to dashboard... (In a real app, you would redirect to the main platform)');
-                        // window.location.href = 'dashboard.html';
+                        
+                        window.location.href = 'index.html';
                     }, 2000);
                 } else {
                     // Error
@@ -508,7 +497,7 @@
 
         // Sign up handler
         function showSignup() {
-            alert('Sign up page would be implemented here');
+             window.location.href = 'signup.html';
         }
 
         // Auto-fill demo credentials for testing
