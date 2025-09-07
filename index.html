@@ -1,294 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIMSPARK</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #031048 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #fff;
-        }
-        nav {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo { font-size: 1.8rem; font-weight: bold; color: white; text-decoration: none; }
-        .nav-links { display: flex; gap: 1rem; list-style: none; }
-        .nav-links a {
-            color: white; text-decoration: none; padding: 0.5rem 1rem;
-            border-radius: 25px; transition: 0.3s;
-        }
-        .nav-links a:hover { background: rgba(255, 255, 255, 0.2); }
-        .nav-links a.active { background: rgba(255, 255, 255, 0.3); }
-        .menu-toggle { display: none; font-size: 1.5rem; color: white; background: none; border: none; }
-        @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: rgba(255,255,255,0.1); }
-            .nav-links.show { display: flex; }
-        }
-        .page { display: none; padding: 2rem; }
-        .page.active { display: block; }
-        .hero { text-align: center; padding: 3rem 1rem; }
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem; }
-        .feature-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .feature-card:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-5px); }
-        .btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white; border: none; padding: 0.7rem 1.5rem;
-            border-radius: 25px; cursor: pointer; margin-top: 1rem;
-        }
-        #teamFormContainer {
-            display: none; background: rgba(0, 0, 0, 0.7);
-            padding: 20px; border-radius: 10px; max-width: 700px;
-            margin: 20px auto;
-        }
-        #teamFormContainer input, #teamFormContainer select {
-            width: 100%; padding: 10px; margin-bottom: 10px;
-            border-radius: 8px; border: none;
-        }
-        h3 { margin-top: 15px; }
-        ul li { margin-bottom: 8px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AIMSPARK</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #031048 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #fff;
+    }
+    nav {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-size: 1.8rem; font-weight: bold; color: white; text-decoration: none; }
+    .nav-links { display: flex; gap: 1rem; list-style: none; }
+    .nav-links a {
+      color: white; text-decoration: none; padding: 0.5rem 1rem;
+      border-radius: 25px; transition: 0.3s;
+    }
+    .nav-links a:hover { background: rgba(255, 255, 255, 0.2); }
+    .nav-links a.active { background: rgba(255, 255, 255, 0.3); }
+    .menu-toggle { display: none; font-size: 1.5rem; color: white; background: none; border: none; }
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: rgba(255,255,255,0.1); }
+      .nav-links.show { display: flex; }
+    }
+    .page { display: none; padding: 2rem; }
+    .page.active { display: block; }
+    .hero { text-align: center; padding: 3rem 1rem; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .feature-card:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-5px); }
+    .btn {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white; border: none; padding: 0.7rem 1.5rem;
+      border-radius: 25px; cursor: pointer; margin-top: 1rem;
+    }
+    #teamFormContainer {
+      display: none; background: rgba(0, 0, 0, 0.7);
+      padding: 20px; border-radius: 10px; max-width: 700px;
+      margin: 20px auto;
+    }
+    #teamFormContainer input, #teamFormContainer select {
+      width: 100%; padding: 10px; margin-bottom: 10px;
+      border-radius: 8px; border: none;
+    }
+    h3 { margin-top: 15px; }
+    ul li { margin-bottom: 8px; }
+
+    /* Problem statement styles */
+    .problem-section { margin-top: 2rem; }
+    .problem-section h2 {
+      margin-bottom: 1rem;
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+      padding-bottom: 5px;
+    }
+    .problem-card {
+      background: rgba(255, 255, 255, 0.1);
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .problem-card h3 {
+      margin-bottom: 0.5rem;
+      color: #ffdf6c;
+    }
+  </style>
 </head>
 <body>
-    <nav>
-        <a href="#" class="logo" onclick="showPage('home')">AIMSPARK</a>
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-        <ul class="nav-links" id="navLinks">
-            <li id="name" style="color:white;"></li>
-            <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
-            <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
-            <li id="instructionsLink"><a href="#" onclick="showPage('instructions')" class="nav-link">Instructions</a></li>
-            <li id="teamLink"><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
-            <li id="dashboardLink"><a href="#" onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
-            <li><a href="#" onclick="logout()">Logout</a></li>
-        </ul>
-    </nav>
+  <nav>
+    <a href="#" class="logo" onclick="showPage('home')">AIMSPARK</a>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li id="name" style="color:white;"></li>
+      <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+      <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
+      <li id="instructionsLink"><a href="#" onclick="showPage('instructions')" class="nav-link">Instructions</a></li>
+      <li id="teamLink"><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
+      <li id="dashboardLink"><a href="#" onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
+      <li><a href="#" onclick="logout()">Logout</a></li>
+    </ul>
+  </nav>
 
-    <div class="container">
-        <!-- Home -->
-        <div id="home" class="page active">
-            <section class="hero">
-                <h1>Welcome to AIMSPARK</h1>
-                <p>Your solution for collaboration and innovation</p>
-            </section>
-            <div class="feature-grid">
-                <div class="feature-card" onclick="showPage('problems')"> <h3>🎯 Problem Statement</h3><p>Explore and define challenging problems</p></div>
-                <div class="feature-card" onclick="showPage('instructions')"> <h3>📜 Instructions</h3><p>Know the rules before you code</p></div>
-                <div class="feature-card" onclick="showPage('team')"> <h3>👥 Create Team</h3><p>Build and manage your dream team</p></div>
-                <div class="feature-card" onclick="showPage('dashboard')"> <h3>📊 Dashboard</h3><p>Monitor progress and track metrics</p></div>
-            </div>
-        </div>
-
-        <!-- Problem Statements -->
-        <div id="problems" class="page">
-            <h1>Problem Statement</h1>
-            <p>Smart City Infrastructure Challenge</p>
-        </div>
-
-        <!-- Instructions -->
-        <div id="instructions" class="page">
-            <h1>Hackathon Instructions</h1>
-            <div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;line-height:1.6;">
-                <h3>📌 General Guidelines:</h3>
-                <ul>
-                    <li>Each team must have <strong>2 to 4 members</strong>.</li>
-                    <li>Teams must submit their project before the deadline.</li>
-                    <li>Ensure all members have unique email IDs.</li>
-                </ul>
-                <h3>⚙️ Development Rules:</h3>
-                <ul>
-                    <li>Use any technology stack you are comfortable with.</li>
-                    <li>Code must be original; plagiarism will lead to disqualification.</li>
-                    <li>APIs and third-party libraries are allowed.</li>
-                </ul>
-                <h3>🏆 Judging Criteria:</h3>
-                <ul>
-                    <li>Innovation and Creativity</li>
-                    <li>Technical Implementation</li>
-                    <li>Presentation & UI/UX</li>
-                    <li>Impact</li>
-                </ul>
-                <h3>⏳ Timeline:</h3>
-                <p>Hackathon will start at <strong>1:00 PM</strong> and end at <strong>4:00 PM</strong>.</p>
-            </div>
-        </div>
-
-        <!-- Team -->
-        <div id="team" class="page">
-            <h1>Create Team</h1>
-            <button class="btn" onclick="showTeamForm()">Create New Team</button>
-            <div id="teamFormContainer">
-                <h2>Team Registration</h2>
-                <input type="text" id="teamName" placeholder="Team Name" required>
-                <h3>Member 1 (Required)</h3>
-                <input type="text" id="member1" placeholder="Name" required>
-                <input type="text" id="contact1" placeholder="Contact Number" required>
-                <input type="email" id="email1" placeholder="Email" required>
-                <input type="text" id="department1" placeholder="Department" required>
-                <select id="year1" required>
-                    <option value="">Select Year</option>
-                    <option>First Year</option>
-                    <option>Second Year</option>
-                    <option>Third Year</option>
-                    <option>Final Year</option>
-                </select>
-                <h3>Member 2 (Required)</h3>
-                <input type="text" id="member2" placeholder="Name" required>
-                <input type="text" id="contact2" placeholder="Contact Number" required>
-                <input type="email" id="email2" placeholder="Email" required>
-                <input type="text" id="department2" placeholder="Department" required>
-                <select id="year2" required>
-                    <option value="">Select Year</option>
-                    <option>First Year</option>
-                    <option>Second Year</option>
-                    <option>Third Year</option>
-                    <option>Final Year</option>
-                </select>
-                <h3>Member 3 (Optional)</h3>
-                <input type="text" id="member3" placeholder="Name">
-                <input type="text" id="contact3" placeholder="Contact Number">
-                <input type="email" id="email3" placeholder="Email">
-                <input type="text" id="department3" placeholder="Department">
-                <select id="year3">
-                    <option value="">Select Year</option>
-                    <option>First Year</option>
-                    <option>Second Year</option>
-                    <option>Third Year</option>
-                    <option>Final Year</option>
-                </select>
-                <h3>Member 4 (Optional)</h3>
-                <input type="text" id="member4" placeholder="Name">
-                <input type="text" id="contact4" placeholder="Contact Number">
-                <input type="email" id="email4" placeholder="Email">
-                <input type="text" id="department4" placeholder="Department">
-                <select id="year4">
-                    <option value="">Select Year</option>
-                    <option>First Year</option>
-                    <option>Second Year</option>
-                    <option>Third Year</option>
-                    <option>Final Year</option>
-                </select>
-                <button class="btn" onclick="createTeam()">Submit Team</button>
-            </div>
-        </div>
-
-        <!-- Dashboard -->
-        <div id="dashboard" class="page">
-            <h1>Team Dashboard</h1>
-            <p>Your registered team will appear here.</p>
-        </div>
+  <div class="container">
+    <!-- Home -->
+    <div id="home" class="page active">
+      <section class="hero">
+        <h1>Welcome to AIMSPARK</h1>
+        <p>Your solution for collaboration and innovation</p>
+      </section>
+      <div class="feature-grid">
+        <div class="feature-card" onclick="showPage('problems')"> <h3>🎯 Problem Statement</h3><p>Explore and define challenging problems</p></div>
+        <div class="feature-card" onclick="showPage('instructions')"> <h3>📜 Instructions</h3><p>Know the rules before you code</p></div>
+        <div class="feature-card" onclick="showPage('team')"> <h3>👥 Create Team</h3><p>Build and manage your dream team</p></div>
+        <div class="feature-card" onclick="showPage('dashboard')"> <h3>📊 Dashboard</h3><p>Monitor progress and track metrics</p></div>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script>
-        const SUPABASE_URL = 'https://ulhjptxfzgsbepwtjqro.supabase.co';
-        const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY'; // Replace with actual key
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <!-- Problem Statements -->
+    <div id="problems" class="page">
+      <h1>Problem Statements</h1>
 
-        let currentUser = null;
+      <div class="problem-section">
+        <h2>HealthTech</h2>
+        <div class="problem-card">
+          <h3>PSID: HT01</h3>
+          <p>A solution managing queuing models in OPDs, tracking bed occupancy, and enabling hospital admission workflows—scalable to city-level integration.</p>
+        </div>
+        <div class="problem-card">
+          <h3>PSID: HT02 - Sign Language ↔ Audio-Visual Translator</h3>
+          <p>An AI-powered mobile tool that converts between Indian Sign Language (ISL) and audio-visual content (e.g., English/Hindi), improving accessibility for the deaf and mute.</p>
+        </div>
+      </div>
 
-        async function checkSession() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            currentUser = session?.user || null;
-            updateUI(currentUser);
+      <div class="problem-section">
+        <h2>EdTech (Smart Education)</h2>
+        <div class="problem-card">
+          <h3>PSID: EDT01 - Unified Curriculum Development Platform</h3>
+          <p>A collaborative portal for stakeholders (AICTE admins, curriculum developers) featuring dashboards, version control, discussion forums, and analytics around guideline compliance and curriculum creation.</p>
+        </div>
+        <div class="problem-card">
+          <h3>PSID: EDT02 - Mobile Education for Nomadic Communities</h3>
+          <p>A low-connectivity digital education solution for nomadic groups (e.g., Bakarwals, Gujjars), designed to function offline and support primary schooling under variable network conditions.</p>
+        </div>
+      </div>
+
+      <div class="problem-section">
+        <h2>FinTech</h2>
+        <div class="problem-card">
+          <h3>PSID: FT01</h3>
+          <p>A workshop or app-driven solution to improve money management skills through engaging templates, point systems, and government/private sector collaborations.</p>
+        </div>
+        <div class="problem-card">
+          <h3>PSID: FT02 - Digital Split & Settle</h3>
+          <p>Friends, roommates, or colleagues often struggle to split bills (food, rent, travel, etc.) and keep track of who owes whom. Manual calculations usually create confusion.</p>
+        </div>
+      </div>
+
+      <div class="problem-section">
+        <h2>Innovation</h2>
+        <div class="problem-card">
+          <h3>PSID: SI01</h3>
+          <p>Smart Education, a concept that describes learning in the digital age. It enables learners to learn more effectively, efficiently, flexibly, and comfortably.</p>
+        </div>
+        <div class="problem-card">
+          <h3>PSID: SI02</h3>
+          <p>A solution/idea that can boost the current situation of the tourism industry, including hotels, travel, and other related services.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructions -->
+    <div id="instructions" class="page">
+      <h1>Hackathon Instructions</h1>
+      <div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;line-height:1.6;">
+        <h3>📌 General Guidelines:</h3>
+        <ul>
+          <li>Each team must have <strong>2 to 4 members</strong>.</li>
+          <li>Teams must submit their project before the deadline.</li>
+          <li>Ensure all members have unique email IDs.</li>
+        </ul>
+        <h3>⚙️ Development Rules:</h3>
+        <ul>
+          <li>Use any technology stack you are comfortable with.</li>
+          <li>Code must be original; plagiarism will lead to disqualification.</li>
+          <li>APIs and third-party libraries are allowed.</li>
+        </ul>
+        <h3>🏆 Judging Criteria:</h3>
+        <ul>
+          <li>Innovation and Creativity</li>
+          <li>Technical Implementation</li>
+          <li>Presentation & UI/UX</li>
+          <li>Impact</li>
+        </ul>
+        <h3>⏳ Timeline:</h3>
+        <p>Hackathon will start at <strong>1:00 PM</strong> and end at <strong>4:00 PM</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Team -->
+    <div id="team" class="page">
+      <h1>Create Team</h1>
+      <button class="btn" onclick="showTeamForm()">Create New Team</button>
+      <div id="teamFormContainer">
+        <h2>Team Registration</h2>
+        <input type="text" id="teamName" placeholder="Team Name" required>
+        <h3>Member 1 (Required)</h3>
+        <input type="text" id="member1" placeholder="Name" required>
+        <input type="text" id="contact1" placeholder="Contact Number" required>
+        <input type="email" id="email1" placeholder="Email" required>
+        <input type="text" id="department1" placeholder="Department" required>
+        <select id="year1" required>
+          <option value="">Select Year</option>
+          <option>First Year</option>
+          <option>Second Year</option>
+          <option>Third Year</option>
+          <option>Final Year</option>
+        </select>
+        <h3>Member 2 (Required)</h3>
+        <input type="text" id="member2" placeholder="Name" required>
+        <input type="text" id="contact2" placeholder="Contact Number" required>
+        <input type="email" id="email2" placeholder="Email" required>
+        <input type="text" id="department2" placeholder="Department" required>
+        <select id="year2" required>
+          <option value="">Select Year</option>
+          <option>First Year</option>
+          <option>Second Year</option>
+          <option>Third Year</option>
+          <option>Final Year</option>
+        </select>
+        <h3>Member 3 (Optional)</h3>
+        <input type="text" id="member3" placeholder="Name">
+        <input type="text" id="contact3" placeholder="Contact Number">
+        <input type="email" id="email3" placeholder="Email">
+        <input type="text" id="department3" placeholder="Department">
+        <select id="year3">
+          <option value="">Select Year</option>
+          <option>First Year</option>
+          <option>Second Year</option>
+          <option>Third Year</option>
+          <option>Final Year</option>
+        </select>
+        <h3>Member 4 (Optional)</h3>
+        <input type="text" id="member4" placeholder="Name">
+        <input type="text" id="contact4" placeholder="Contact Number">
+        <input type="email" id="email4" placeholder="Email">
+        <input type="text" id="department4" placeholder="Department">
+        <select id="year4">
+          <option value="">Select Year</option>
+          <option>First Year</option>
+          <option>Second Year</option>
+          <option>Third Year</option>
+          <option>Final Year</option>
+        </select>
+        <button class="btn" onclick="createTeam()">Submit Team</button>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="page">
+      <h1>Team Dashboard</h1>
+      <p>Your registered team will appear here.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const SUPABASE_URL = 'https://ulhjptxfzgsbepwtjqro.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY'; // Replace with actual key
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentUser = null;
+
+    async function checkSession() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      currentUser = session?.user || null;
+      updateUI(currentUser);
+    }
+
+    function updateUI(user) {
+      document.getElementById("name").textContent = user ? "👋 " + (user.user_metadata?.full_name || user.email) : "Guest";
+      document.getElementById('teamLink').style.display = user ? 'block' : 'none';
+      document.getElementById('dashboardLink').style.display = user ? 'block' : 'none';
+      document.getElementById('instructionsLink').style.display = user ? 'block' : 'none';
+    }
+
+    async function showPage(pageId) {
+      await checkSession();
+      const restrictedPages = ['team', 'dashboard', 'instructions'];
+      if (restrictedPages.includes(pageId) && !currentUser) {
+        alert('You must log in to access this page.');
+        window.location.href = 'login.html';
+        return;
+      }
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
+      document.getElementById('navLinks').classList.remove('show');
+    }
+
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('show');
+    }
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      updateUI(null);
+      window.location.href = 'login.html';
+    }
+
+    function showTeamForm() {
+      document.getElementById('teamFormContainer').style.display = 'block';
+    }
+
+    async function createTeam() {
+      if (!currentUser) {
+        alert('You must log in first!');
+        return;
+      }
+      const teamName = document.getElementById('teamName').value;
+      const members = [];
+      for (let i = 1; i <= 4; i++) {
+        const name = document.getElementById(`member${i}`).value;
+        const contact = document.getElementById(`contact${i}`).value;
+        const email = document.getElementById(`email${i}`).value;
+        const dept = document.getElementById(`department${i}`).value;
+        const year = document.getElementById(`year${i}`).value;
+        if (name) {
+          members.push({ name, contact, email, dept, year });
         }
+      }
 
-        function updateUI(user) {
-            document.getElementById("name").textContent = user ? "👋 " + (user.user_metadata?.full_name || user.email) : "Guest";
-            document.getElementById('teamLink').style.display = user ? 'block' : 'none';
-            document.getElementById('dashboardLink').style.display = user ? 'block' : 'none';
-            document.getElementById('instructionsLink').style.display = user ? 'block' : 'none';
-        }
+      if (!teamName || members.length < 2) {
+        alert('Please provide a team name and at least 2 members.');
+        return;
+      }
 
-        async function showPage(pageId) {
-            await checkSession();
-            const restrictedPages = ['team', 'dashboard', 'instructions'];
-            if (restrictedPages.includes(pageId) && !currentUser) {
-                alert('You must log in to access this page.');
-                window.location.href = 'login.html';
-                return;
-            }
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
-            document.getElementById('navLinks').classList.remove('show');
-        }
+      const { error } = await supabaseClient.from('teams').insert([{
+        team_name: teamName,
+        members: members,
+        user_id: currentUser.id
+      }]);
 
-        function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('show');
-        }
+      if (error) {
+        alert('Error creating team: ' + error.message);
+      } else {
+        alert('Team created successfully!');
+        document.getElementById('teamFormContainer').style.display = 'none';
+      }
+    }
 
-        async function logout() {
-            await supabaseClient.auth.signOut();
-            currentUser = null;
-            updateUI(null);
-            window.location.href = 'login.html';
-        }
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      currentUser = session?.user || null;
+      updateUI(currentUser);
+    });
 
-        function showTeamForm() {
-            document.getElementById('teamFormContainer').style.display = 'block';
-        }
-
-        async function createTeam() {
-            if (!currentUser) {
-                alert('You must log in first!');
-                return;
-            }
-            const teamName = document.getElementById('teamName').value;
-            const members = [];
-            for (let i = 1; i <= 4; i++) {
-                const name = document.getElementById(`member${i}`).value;
-                const contact = document.getElementById(`contact${i}`).value;
-                const email = document.getElementById(`email${i}`).value;
-                const dept = document.getElementById(`department${i}`).value;
-                const year = document.getElementById(`year${i}`).value;
-                if (name) {
-                    members.push({ name, contact, email, dept, year });
-                }
-            }
-
-            if (!teamName || members.length < 2) {
-                alert('Please provide a team name and at least 2 members.');
-                return;
-            }
-
-            const { error } = await supabaseClient.from('teams').insert([{
-                team_name: teamName,
-                members: members,
-                user_id: currentUser.id
-            }]);
-
-            if (error) {
-                alert('Error creating team: ' + error.message);
-            } else {
-                alert('Team created successfully!');
-                document.getElementById('teamFormContainer').style.display = 'none';
-            }
-        }
-
-        supabaseClient.auth.onAuthStateChange((_event, session) => {
-            currentUser = session?.user || null;
-            updateUI(currentUser);
-        });
-
-        checkSession();
-    </script>
+    checkSession();
+  </script>
 </body>
 </html>

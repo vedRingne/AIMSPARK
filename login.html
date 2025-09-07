@@ -1,303 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIMSPARK - Login</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIMSPARK - Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #031048 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            overflow: hidden;
-            position: relative;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #031048 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      overflow: hidden;
+      position: relative;
+    }
 
-        /* Animated background */
-        .bg-animation {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
+    /* Animated background */
+    .bg-animation {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
 
-        .floating-shapes {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 6s ease-in-out infinite;
-        }
+    .floating-shapes {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      animation: float 6s ease-in-out infinite;
+    }
 
-        .shape-1 { top: 10%; left: 10%; animation-delay: 0s; }
-        .shape-2 { top: 20%; right: 10%; animation-delay: 1s; transform: scale(0.8); }
-        .shape-3 { bottom: 10%; left: 15%; animation-delay: 2s; transform: scale(1.2); }
-        .shape-4 { bottom: 20%; right: 20%; animation-delay: 3s; }
+    .shape-1 { top: 10%; left: 10%; animation-delay: 0s; }
+    .shape-2 { top: 20%; right: 10%; animation-delay: 1s; transform: scale(0.8); }
+    .shape-3 { bottom: 10%; left: 15%; animation-delay: 2s; transform: scale(1.2); }
+    .shape-4 { bottom: 20%; right: 20%; animation-delay: 3s; }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
 
-        /* Login container */
-        .login-container {
-            position: relative;
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 25px;
-            padding: 3rem;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            width: 100%;
-            max-width: 450px;
-            animation: slideUp 0.8s ease-out;
-        }
+    /* Login container */
+    .login-container {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 3rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      width: 100%;
+      max-width: 450px;
+      animation: slideUp 0.8s ease-out;
+    }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
 
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
+    .logo {
+      font-size: 2.5rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
 
-        .welcome-text { color: #666; font-size: 1.1rem; margin-bottom: 0.5rem; }
-        .subtitle { color: #888; font-size: 0.95rem; }
+    .welcome-text { color: #666; font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .subtitle { color: #888; font-size: 0.95rem; }
 
-        .login-form { display: flex; flex-direction: column; gap: 1.5rem; }
+    .login-form { display: flex; flex-direction: column; gap: 1.5rem; }
 
-        .form-group label { display: block; margin-bottom: 0.5rem; color: #555; font-weight: 500; }
-        .form-group input {
-            width: 100%;
-            padding: 1rem 1.2rem;
-            border: 2px solid #e1e5e9;
-            border-radius: 15px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-        }
+    .form-group label { display: block; margin-bottom: 0.5rem; color: #555; font-weight: 500; }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            transform: translateY(-2px);
-        }
+    .form-group input {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 15px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+    }
 
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 38px;
-            cursor: pointer;
-            color: #666;
-            font-size: 1.2rem;
-        }
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+    }
 
-        .form-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-        }
+    /* Password wrapper */
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-        .remember-me { display: flex; align-items: center; gap: 0.5rem; color: #666; }
-        .forgot-password { color: #667eea; text-decoration: none; }
-        .forgot-password:hover { color: #764ba2; text-decoration: underline; }
+    .password-wrapper input {
+      width: 100%;
+      padding-right: 2.5rem; /* space for the eye emoji */
+    }
 
-        .login-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            position: relative;
-        }
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      cursor: pointer;
+      color: #666;
+      font-size: 1.2rem;
+      user-select: none;
+    }
 
-        .login-btn.loading { pointer-events: none; opacity: 0.8; }
-        .login-btn.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
 
-        @keyframes spin { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+    .remember-me { display: flex; align-items: center; gap: 0.5rem; color: #666; }
+    .forgot-password { color: #667eea; text-decoration: none; }
+    .forgot-password:hover { color: #764ba2; text-decoration: underline; }
 
-        .signup-link { text-align: center; margin-top: 2rem; border-top: 1px solid #e1e5e9; padding-top: 1.5rem; }
-        .signup-link a { color: #667eea; font-weight: 600; }
+    .login-btn {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 15px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+    }
 
-        .error-message, .success-message {
-            padding: 0.8rem;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: none;
-        }
+    .login-btn.loading { pointer-events: none; opacity: 0.8; }
+    .login-btn.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-        .error-message { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); }
-        .success-message { background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.2); }
+    @keyframes spin { 
+      0% { transform: translate(-50%, -50%) rotate(0deg); } 
+      100% { transform: translate(-50%, -50%) rotate(360deg); } 
+    }
 
-        @media (max-width: 480px) { .login-container { margin: 1rem; padding: 2rem; } .logo { font-size: 2rem; } }
-    </style>
+    .signup-link { text-align: center; margin-top: 2rem; border-top: 1px solid #e1e5e9; padding-top: 1.5rem; }
+    .signup-link a { color: #667eea; font-weight: 600; }
+
+    .error-message, .success-message {
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .error-message { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); }
+    .success-message { background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.2); }
+
+    @media (max-width: 480px) { 
+      .login-container { margin: 1rem; padding: 2rem; } 
+      .logo { font-size: 2rem; } 
+    }
+  </style>
 </head>
 <body>
-    <div class="bg-animation">
-        <div class="floating-shapes shape-1"></div>
-        <div class="floating-shapes shape-2"></div>
-        <div class="floating-shapes shape-3"></div>
-        <div class="floating-shapes shape-4"></div>
+  <div class="bg-animation">
+    <div class="floating-shapes shape-1"></div>
+    <div class="floating-shapes shape-2"></div>
+    <div class="floating-shapes shape-3"></div>
+    <div class="floating-shapes shape-4"></div>
+  </div>
+
+  <div class="login-container">
+    <div class="login-header">
+      <h1 class="logo">AIMSPARK</h1>
+      <p class="welcome-text">Welcome back!</p>
+      <p class="subtitle">Sign in to continue your innovation journey</p>
     </div>
 
-    <div class="login-container">
-        <div class="login-header">
-            <h1 class="logo">AIMSPARK</h1>
-            <p class="welcome-text">Welcome back!</p>
-            <p class="subtitle">Sign in to continue your innovation journey</p>
+    <div class="error-message" id="errorMessage"></div>
+    <div class="success-message" id="successMessage"></div>
+
+    <form class="login-form" id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+          <span class="password-toggle" onclick="togglePassword()">👁️</span>
         </div>
+      </div>
 
-        <div class="error-message" id="errorMessage"></div>
-        <div class="success-message" id="successMessage"></div>
+      <div class="form-options">
+        <label class="remember-me">
+          <input type="checkbox" id="rememberMe"> Remember me
+        </label>
+        <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot password?</a>
+      </div>
 
-        <form class="login-form" id="loginForm">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-            </div>
+      <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
+    </form>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                <span class="password-toggle" onclick="togglePassword()">👁️</span>
-            </div>
+    <div class="signup-link">Don't have an account? <a href="signup.html">Sign up here</a></div>
+  </div>
 
-            <div class="form-options">
-                <label class="remember-me">
-                    <input type="checkbox" id="rememberMe"> Remember me
-                </label>
-                <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot password?</a>
-            </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const SUPABASE_URL = 'https://ulhjptxfzgsbepwtjqro.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
-        </form>
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const toggle = document.querySelector('.password-toggle');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggle.textContent = '🙈';
+      } else {
+        passwordInput.type = 'password';
+        toggle.textContent = '👁️';
+      }
+    }
 
-        <div class="signup-link">Don't have an account? <a href="signup.html">Sign up here</a></div>
-    </div>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script>
-        const SUPABASE_URL = 'https://ulhjptxfzgsbepwtjqro.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const loginBtn = document.getElementById('loginBtn');
+      const errorMessage = document.getElementById('errorMessage');
+      const successMessage = document.getElementById('successMessage');
 
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggle = document.querySelector('.password-toggle');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggle.textContent = '🙈';
-            } else {
-                passwordInput.type = 'password';
-                toggle.textContent = '👁️';
-            }
+      errorMessage.style.display = 'none';
+      successMessage.style.display = 'none';
+
+      loginBtn.classList.add('loading');
+      loginBtn.textContent = '';
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+        loginBtn.classList.remove('loading');
+        loginBtn.textContent = 'Sign In';
+
+        if (error) {
+          errorMessage.textContent = error.message;
+          errorMessage.style.display = 'block';
+          return;
         }
 
-        document.getElementById('loginForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        successMessage.style.display = 'block';
+        successMessage.textContent = 'Login successful! Redirecting...';
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const loginBtn = document.getElementById('loginBtn');
-            const errorMessage = document.getElementById('errorMessage');
-            const successMessage = document.getElementById('successMessage');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1500);
 
-            errorMessage.style.display = 'none';
-            successMessage.style.display = 'none';
+      } catch (err) {
+        console.error(err);
+        errorMessage.textContent = 'Something went wrong. Please try again.';
+        errorMessage.style.display = 'block';
+      }
+    });
 
-            loginBtn.classList.add('loading');
-            loginBtn.textContent = '';
-
-            try {
-                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-                loginBtn.classList.remove('loading');
-                loginBtn.textContent = 'Sign In';
-
-                if (error) {
-                    errorMessage.textContent = error.message;
-                    errorMessage.style.display = 'block';
-                    return;
-                }
-
-                successMessage.style.display = 'block';
-                successMessage.textContent = 'Login successful! Redirecting...';
-
-                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
-
-            } catch (err) {
-                console.error(err);
-                errorMessage.textContent = 'Something went wrong. Please try again.';
-                errorMessage.style.display = 'block';
-            }
-        });
-
-        async function showForgotPassword() {
-            const email = prompt('Enter your email for password reset:');
-            if (email) {
-                const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
-                if (error) {
-                    alert('Error sending reset link');
-                } else {
-                    alert('Password reset link sent to your email');
-                }
-            }
+    async function showForgotPassword() {
+      const email = prompt('Enter your email for password reset:');
+      if (email) {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+        if (error) {
+          alert('Error sending reset link');
+        } else {
+          alert('Password reset link sent to your email');
         }
+      }
+    }
 
-        // Redirect if already logged in
-        async function checkLoggedIn() {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if (user) { window.location.href = 'index.html'; }
-        }
-        checkLoggedIn();
-    </script>
+    // Redirect if already logged in
+    async function checkLoggedIn() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (user) { window.location.href = 'index.html'; }
+    }
+    checkLoggedIn();
+  </script>
 </body>
 </html>
