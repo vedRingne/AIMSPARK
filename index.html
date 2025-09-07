@@ -1,344 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Platform Hub</title>
+    <title>AIMSPARK</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #031048 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #333;
+            color: #fff;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
         nav {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-content {
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
+        .logo { font-size: 1.8rem; font-weight: bold; color: white; text-decoration: none; }
+        .nav-links { display: flex; gap: 1rem; list-style: none; }
         .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
+            color: white; text-decoration: none; padding: 0.5rem 1rem;
+            border-radius: 25px; transition: 0.3s;
         }
-
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .nav-links a:hover { background: rgba(255, 255, 255, 0.2); }
+        .nav-links a.active { background: rgba(255, 255, 255, 0.3); }
+        .menu-toggle { display: none; font-size: 1.5rem; color: white; background: none; border: none; }
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: rgba(255,255,255,0.1); }
+            .nav-links.show { display: flex; }
         }
-
-        .nav-links a.active {
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .page {
-            display: none;
-            min-height: calc(100vh - 80px);
-            padding: 2rem 0;
-        }
-
-        .page.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            color: white;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #fff, #e0e0e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
+        .page { display: none; padding: 2rem; }
+        .page.active { display: block; }
+        .hero { text-align: center; padding: 3rem 1rem; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem; }
         .feature-card {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 2rem;
+            padding: 1.5rem;
+            border-radius: 15px;
             text-align: center;
-            color: white;
-            transition: all 0.3s ease;
+            transition: 0.3s;
             cursor: pointer;
         }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .content-page {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 3rem;
-            margin: 2rem 0;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .page-header p {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
+        .feature-card:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-5px); }
         .btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            margin: 0.5rem;
+            color: white; border: none; padding: 0.7rem 1.5rem;
+            border-radius: 25px; cursor: pointer; margin-top: 1rem;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        #teamFormContainer {
+            display: none; background: rgba(0, 0, 0, 0.7);
+            padding: 20px; border-radius: 10px; max-width: 700px;
+            margin: 20px auto;
         }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .content-page {
-                padding: 2rem 1rem;
-            }
+        #teamFormContainer input, #teamFormContainer select {
+            width: 100%; padding: 10px; margin-bottom: 10px;
+            border-radius: 8px; border: none;
         }
-
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                padding: 1rem;
-            }
-
-            .nav-links.show {
-                display: flex;
-            }
-        }
+        h3 { margin-top: 15px; }
+        ul li { margin-bottom: 8px; }
     </style>
 </head>
-
 <body>
     <nav>
-        <div class="container">
-            <div class="nav-content">
-                <a href="#" class="logo" onclick="showPage('home')">AIMSPARK</a>
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-                <ul class="nav-links" id="navLinks">
-                    <li id="name"></li>
-                    <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
-                    <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
-                    <li id="teamLink"><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
-                    <li id="dashboardLink"><a href="#" onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
-                </ul>
-            </div>
-        </div>
+        <a href="#" class="logo" onclick="showPage('home')">AIMSPARK</a>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li id="name" style="color:white;"></li>
+            <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+            <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
+            <li id="instructionsLink"><a href="#" onclick="showPage('instructions')" class="nav-link">Instructions</a></li>
+            <li id="teamLink"><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
+            <li id="dashboardLink"><a href="#" onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
+            <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
     </nav>
 
     <div class="container">
-        <!-- Home Page -->
+        <!-- Home -->
         <div id="home" class="page active">
             <section class="hero">
                 <h1>Welcome to AIMSPARK</h1>
-                <p>Your comprehensive solution for problem-solving, team collaboration, and project management</p>
+                <p>Your solution for collaboration and innovation</p>
             </section>
-
             <div class="feature-grid">
-                <div class="feature-card" onclick="showPage('problems')">
-                    <h3>🎯 Problem Statement</h3>
-                    <p>Explore and define challenging problems that need innovative solutions</p>
-                </div>
-                <div class="feature-card" onclick="showPage('team')">
-                    <h3>👥 Create Team</h3>
-                    <p>Build and manage your dream team for tackling complex challenges</p>
-                </div>
-                <div class="feature-card" onclick="showPage('dashboard')">
-                    <h3>📊 Dashboard</h3>
-                    <p>Monitor progress, track metrics, and visualize your project's success</p>
-                </div>
+                <div class="feature-card" onclick="showPage('problems')"> <h3>🎯 Problem Statement</h3><p>Explore and define challenging problems</p></div>
+                <div class="feature-card" onclick="showPage('instructions')"> <h3>📜 Instructions</h3><p>Know the rules before you code</p></div>
+                <div class="feature-card" onclick="showPage('team')"> <h3>👥 Create Team</h3><p>Build and manage your dream team</p></div>
+                <div class="feature-card" onclick="showPage('dashboard')"> <h3>📊 Dashboard</h3><p>Monitor progress and track metrics</p></div>
             </div>
         </div>
 
-        <!-- Problem Statement Page -->
+        <!-- Problem Statements -->
         <div id="problems" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Problem Statement</h1>
-                    <p>Identify, analyze, and define problems that drive innovation</p>
-                </div>
-                <div class="problem-card">
-                    <h3>Current Challenge: Smart City Infrastructure</h3>
-                    <p><strong>Problem:</strong> Urban areas are struggling with traffic congestion, energy
-                        inefficiency, and waste management issues.</p>
-                </div>
+            <h1>Problem Statement</h1>
+            <p>Smart City Infrastructure Challenge</p>
+        </div>
+
+        <!-- Instructions -->
+        <div id="instructions" class="page">
+            <h1>Hackathon Instructions</h1>
+            <div style="background:rgba(255,255,255,0.1);padding:20px;border-radius:10px;line-height:1.6;">
+                <h3>📌 General Guidelines:</h3>
+                <ul>
+                    <li>Each team must have <strong>2 to 4 members</strong>.</li>
+                    <li>Teams must submit their project before the deadline.</li>
+                    <li>Ensure all members have unique email IDs.</li>
+                </ul>
+                <h3>⚙️ Development Rules:</h3>
+                <ul>
+                    <li>Use any technology stack you are comfortable with.</li>
+                    <li>Code must be original; plagiarism will lead to disqualification.</li>
+                    <li>APIs and third-party libraries are allowed.</li>
+                </ul>
+                <h3>🏆 Judging Criteria:</h3>
+                <ul>
+                    <li>Innovation and Creativity</li>
+                    <li>Technical Implementation</li>
+                    <li>Presentation & UI/UX</li>
+                    <li>Impact</li>
+                </ul>
+                <h3>⏳ Timeline:</h3>
+                <p>Hackathon will start at <strong>1:00 PM</strong> and end at <strong>4:00 PM</strong>.</p>
             </div>
         </div>
 
-        <!-- Create Team Page -->
+        <!-- Team -->
         <div id="team" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Create Team</h1>
-                    <p>Build diverse, skilled teams to tackle complex challenges</p>
-                </div>
-                <div class="admin-section">
-                    <h3>Team Formation Tools</h3>
-                    <button class="btn" onclick="alert('Team creation wizard launched!')">Create New Team</button>
-                </div>
+            <h1>Create Team</h1>
+            <button class="btn" onclick="showTeamForm()">Create New Team</button>
+            <div id="teamFormContainer">
+                <h2>Team Registration</h2>
+                <input type="text" id="teamName" placeholder="Team Name" required>
+                <h3>Member 1 (Required)</h3>
+                <input type="text" id="member1" placeholder="Name" required>
+                <input type="text" id="contact1" placeholder="Contact Number" required>
+                <input type="email" id="email1" placeholder="Email" required>
+                <input type="text" id="department1" placeholder="Department" required>
+                <select id="year1" required>
+                    <option value="">Select Year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Final Year</option>
+                </select>
+                <h3>Member 2 (Required)</h3>
+                <input type="text" id="member2" placeholder="Name" required>
+                <input type="text" id="contact2" placeholder="Contact Number" required>
+                <input type="email" id="email2" placeholder="Email" required>
+                <input type="text" id="department2" placeholder="Department" required>
+                <select id="year2" required>
+                    <option value="">Select Year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Final Year</option>
+                </select>
+                <h3>Member 3 (Optional)</h3>
+                <input type="text" id="member3" placeholder="Name">
+                <input type="text" id="contact3" placeholder="Contact Number">
+                <input type="email" id="email3" placeholder="Email">
+                <input type="text" id="department3" placeholder="Department">
+                <select id="year3">
+                    <option value="">Select Year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Final Year</option>
+                </select>
+                <h3>Member 4 (Optional)</h3>
+                <input type="text" id="member4" placeholder="Name">
+                <input type="text" id="contact4" placeholder="Contact Number">
+                <input type="email" id="email4" placeholder="Email">
+                <input type="text" id="department4" placeholder="Department">
+                <select id="year4">
+                    <option value="">Select Year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Final Year</option>
+                </select>
+                <button class="btn" onclick="createTeam()">Submit Team</button>
             </div>
         </div>
 
-        <!-- Dashboard Page -->
+        <!-- Dashboard -->
         <div id="dashboard" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Team Dashboard</h1>
-                    <p>Monitor your team's progress, tasks, and collaboration metrics</p>
-                </div>
-            </div>
+            <h1>Team Dashboard</h1>
+            <p>Your registered team will appear here.</p>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script>
         const SUPABASE_URL = 'https://ulhjptxfzgsbepwtjqro.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A';
+        const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY'; // Replace with actual key
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function showPage(pageId) {
-            const { data: { user } } = await supabaseClient.auth.getUser();
+        let currentUser = null;
 
-            const restrictedPages = ['team', 'dashboard'];
-            if (restrictedPages.includes(pageId) && !user) {
+        async function checkSession() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            currentUser = session?.user || null;
+            updateUI(currentUser);
+        }
+
+        function updateUI(user) {
+            document.getElementById("name").textContent = user ? "👋 " + (user.user_metadata?.full_name || user.email) : "Guest";
+            document.getElementById('teamLink').style.display = user ? 'block' : 'none';
+            document.getElementById('dashboardLink').style.display = user ? 'block' : 'none';
+            document.getElementById('instructionsLink').style.display = user ? 'block' : 'none';
+        }
+
+        async function showPage(pageId) {
+            await checkSession();
+            const restrictedPages = ['team', 'dashboard', 'instructions'];
+            if (restrictedPages.includes(pageId) && !currentUser) {
                 alert('You must log in to access this page.');
-                window.location.href = 'login.html'; // Change to your login page
+                window.location.href = 'login.html';
                 return;
             }
-
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            const activeLink = document.querySelector(`[onclick="showPage('${pageId}')"].nav-link`);
-            if (activeLink) activeLink.classList.add('active');
-
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
             document.getElementById('navLinks').classList.remove('show');
         }
 
@@ -346,37 +235,60 @@
             document.getElementById('navLinks').classList.toggle('show');
         }
 
-        document.addEventListener('click', function (event) {
-            const nav = document.querySelector('nav');
-            const navLinks = document.getElementById('navLinks');
-            if (!nav.contains(event.target)) {
-                navLinks.classList.remove('show');
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            currentUser = null;
+            updateUI(null);
+            window.location.href = 'login.html';
+        }
+
+        function showTeamForm() {
+            document.getElementById('teamFormContainer').style.display = 'block';
+        }
+
+        async function createTeam() {
+            if (!currentUser) {
+                alert('You must log in first!');
+                return;
             }
+            const teamName = document.getElementById('teamName').value;
+            const members = [];
+            for (let i = 1; i <= 4; i++) {
+                const name = document.getElementById(`member${i}`).value;
+                const contact = document.getElementById(`contact${i}`).value;
+                const email = document.getElementById(`email${i}`).value;
+                const dept = document.getElementById(`department${i}`).value;
+                const year = document.getElementById(`year${i}`).value;
+                if (name) {
+                    members.push({ name, contact, email, dept, year });
+                }
+            }
+
+            if (!teamName || members.length < 2) {
+                alert('Please provide a team name and at least 2 members.');
+                return;
+            }
+
+            const { error } = await supabaseClient.from('teams').insert([{
+                team_name: teamName,
+                members: members,
+                user_id: currentUser.id
+            }]);
+
+            if (error) {
+                alert('Error creating team: ' + error.message);
+            } else {
+                alert('Team created successfully!');
+                document.getElementById('teamFormContainer').style.display = 'none';
+            }
+        }
+
+        supabaseClient.auth.onAuthStateChange((_event, session) => {
+            currentUser = session?.user || null;
+            updateUI(currentUser);
         });
 
-        async function loadUser() {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if (user) {
-                document.getElementById("name").textContent = "👋 " + (user.user_metadata?.full_name || "User");
-            } else {
-                document.getElementById("name").textContent = "Guest";
-            }
-            toggleRestrictedLinks(user);
-        }
-
-        function toggleRestrictedLinks(user) {
-            const teamLink = document.getElementById('teamLink');
-            const dashboardLink = document.getElementById('dashboardLink');
-            if (!user) {
-                teamLink.style.display = 'none';
-                dashboardLink.style.display = 'none';
-            } else {
-                teamLink.style.display = 'block';
-                dashboardLink.style.display = 'block';
-            }
-        }
-
-        loadUser();
+        checkSession();
     </script>
 </body>
 </html>
