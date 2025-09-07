@@ -31,9 +31,12 @@
     .form-group { position: relative; }
     .form-group input { width: 100%; padding: 1rem; border: 2px solid #e1e5e9; border-radius: 15px; font-size: 1rem; }
     .password-toggle { position: absolute; right: 15px; top: 38px; cursor: pointer; }
-    .login-btn { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 1rem; border-radius: 15px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
+    .login-btn { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 1rem; border-radius: 15px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.3s ease; }
+    .login-btn:disabled { background: gray; cursor: not-allowed; }
     .error-message { background: rgba(220, 53, 69, 0.1); color: #dc3545; padding: 0.8rem; border-radius: 10px; display: none; margin-bottom: 1rem; }
     .success-message { background: rgba(40, 167, 69, 0.1); color: #28a745; padding: 0.8rem; border-radius: 10px; display: none; margin-bottom: 1rem; }
+    .signup-link { text-align: center; margin-top: 1rem; }
+    .signup-link a { color: #764ba2; text-decoration: none; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -56,7 +59,6 @@
   <div class="success-message" id="successMessage"></div>
 
   <form class="login-form" id="signupForm">
-    <!-- ✅ Name field added -->
     <div class="form-group">
       <label for="name">Full Name</label>
       <input type="text" id="name" placeholder="Enter your full name" required />
@@ -81,15 +83,12 @@
   </div>
 </div>
 
-<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
   const SUPABASE_URL = "https://ulhjptxfzgsbepwtjqro.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A"; // apna key yaha paste karo
-
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A";
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  // Toggle password
   function togglePassword() {
     const passwordInput = document.getElementById("password");
     const toggle = document.querySelector(".password-toggle");
@@ -102,7 +101,6 @@
     }
   }
 
-  // Signup form
   document.getElementById("signupForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -116,30 +114,47 @@
     errorMessage.style.display = "none";
     successMessage.style.display = "none";
 
-    signupBtn.textContent = "Loading...";
+    if (password.length < 6) {
+      errorMessage.textContent = "Password must be at least 6 characters long.";
+      errorMessage.style.display = "block";
+      return;
+    }
+
+    signupBtn.disabled = true;
+    signupBtn.textContent = "Signing up...";
 
     const { data, error } = await client.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: name } // ✅ name save user_metadata me
+        data: { full_name: name }
       }
     });
 
+    signupBtn.disabled = false;
     signupBtn.textContent = "Sign Up";
 
     if (error) {
       errorMessage.textContent = error.message;
       errorMessage.style.display = "block";
     } else {
-      successMessage.textContent = "Signup successful! Please check your email.";
+      successMessage.textContent = "Signup successful! Please check your email for verification.";
       successMessage.style.display = "block";
 
       setTimeout(() => {
         window.location.href = "index.html";
-      }, 3000);
+      }, 4000);
     }
   });
+
+  // Redirect if already logged in
+  async function checkLoggedIn() {
+    const { data: { user } } = await client.auth.getUser();
+    if (user) {
+      window.location.href = "index.html";
+    }
+  }
+  checkLoggedIn();
 </script>
 
 </body>

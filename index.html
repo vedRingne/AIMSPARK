@@ -1,712 +1,545 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Platform Hub</title>
+    <title>AIMSPARK</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #031048 0%, #764ba2 100%);
             min-height: 100vh;
-            color: #333;
+            color: #fff;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navigation */
         nav {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-content {
+            padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
+        .logo { font-size: 1.8rem; font-weight: bold; color: white; text-decoration: none; }
+        .nav-links { display: flex; gap: 1rem; list-style: none; }
         .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
+            color: white; text-decoration: none; padding: 0.5rem 1rem;
+            border-radius: 25px; transition: 0.3s;
         }
-
-        .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+        .nav-links a:hover { background: rgba(255, 255, 255, 0.2); }
+        .nav-links a.active { background: rgba(255, 255, 255, 0.3); }
+        .menu-toggle { display: none; font-size: 1.5rem; color: white; background: none; border: none; }
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: rgba(255,255,255,0.1); }
+            .nav-links.show { display: flex; }
         }
-
-        .nav-links a.active {
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Page Content */
-        .page {
-            display: none;
-            min-height: calc(100vh - 80px);
-            padding: 2rem 0;
-        }
-
-        .page.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Home Page Styles */
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            color: white;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #fff, #e0e0e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
+        .page { display: none; padding: 2rem; }
+        .page.active { display: block; }
+        .hero { text-align: center; padding: 3rem 1rem; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 2rem; }
         .feature-card {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 2rem;
+            padding: 1.5rem;
+            border-radius: 15px;
             text-align: center;
-            color: white;
-            transition: all 0.3s ease;
+            transition: 0.3s;
             cursor: pointer;
         }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card p {
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-
-        /* Content Pages */
-        .content-page {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 3rem;
-            margin: 2rem 0;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 1rem;
-        }
-
-        .page-header p {
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        /* Problem Statement Page */
-        .problem-card {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 2rem;
-            margin: 2rem 0;
-            border-radius: 10px;
-        }
-
-        .problem-card h3 {
-            color: #007bff;
-            margin-bottom: 1rem;
-        }
-
-        /* Team Page */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .team-member {
-            text-align: center;
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 15px;
-            transition: transform 0.3s ease;
-            position: relative;
-        }
-
-        .team-member:hover {
-            transform: translateY(-5px);
-        }
-
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-
-        /* Dashboard */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .dashboard-card {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .dashboard-card h3 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Admin Panel */
-        /*.admin-section {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-        }*/
-
+        .feature-card:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-5px); }
         .btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            margin: 0.5rem;
+            color: white; border: none; padding: 0.7rem 1.5rem;
+            border-radius: 25px; cursor: pointer; margin-top: 1rem;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        #teamFormContainer {
+            display: none; background: rgba(0, 0, 0, 0.7);
+            padding: 20px; border-radius: 10px; max-width: 700px;
+            margin: 20px auto;
         }
-
-        /* Activity List Styles */
-        .activity-list {
-            margin-top: 1rem;
+        #teamFormContainer input, #teamFormContainer select {
+            width: 100%; padding: 10px; margin-bottom: 10px;
+            border-radius: 8px; border: none;
         }
+        h3 { margin-top: 15px; }
+        ul li { margin-bottom: 8px; }
+         .problem-section { margin-top: 2rem; }
+    .problem-section h2 {
+      margin-bottom: 1rem;
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+      padding-bottom: 5px;
+    }
+    .problem-card {
+      background: rgba(255, 255, 255, 0.1);
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .problem-card h3 {
+      margin-bottom: 0.5rem;
+      color: #ffdf6c;
+    }
 
-        .activity-item {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            border-left: 3px solid #667eea;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .activity-item p {
-            margin: 0;
-            color: #333;
-        }
-
-        .activity-item small {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Team member status indicator */
-        .team-member p:last-child {
-            font-size: 0.9rem;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .content-page {
-                padding: 2rem 1rem;
-            }
-        }
-
-        /* Mobile menu toggle */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                padding: 1rem;
-            }
-
-            .nav-links.show {
-                display: flex;
-            }
-        }
     </style>
 </head>
-
 <body>
-    <nav>
-        <div class="container">
-            <div class="nav-content">
-                <a href="#" class="logo" onclick="showPage('home')">AIMSPARK</a>
-                <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-                <ul class="nav-links" id="navLinks">
-                     <li id="name"></li>
-                    <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
-                    <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
-                    <li><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
-                    <li><a href="#" onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
-                    <!-- <li><a href="#" onclick="showPage('admin')" class="nav-link">Admin Panel</a></li> -->
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <nav style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px;">
+  <!-- Logo Section -->
+  <a href="#" class="logo" onclick="showPage('home')" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-size: 22px; font-weight: bold;">
+    AIMSPARK
+    <img src="aimsa.jpg" alt="Logo Icon" style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover;" />
+  </a>
+
+  <!-- Navigation Links -->
+  <ul class="nav-links" id="navLinks" style="display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; align-items: center;">
+    <li id="name" style="color: white;"></li>
+    <li><a href="#" onclick="showPage('home')" class="nav-link active">Home</a></li>
+    <li><a href="#" onclick="showPage('problems')" class="nav-link">Problem Statement</a></li>
+    <li id="instructionsLink"><a href="#" onclick="showPage('instructions')" class="nav-link">Instructions</a></li>
+    <li id="teamLink"><a href="#" onclick="showPage('team')" class="nav-link">Create Team</a></li>
+    <li id="dashboardLink"><a href="#" onclick="showPage('dashboard')" class="nav-link">Dashboard</a></li>
+    <li id="authLink"><a href="#" onclick="handleAuthClick()">Loading...</a></li>
+  </ul>
+</nav>
+
+
 
     <div class="container">
-        <!-- Home Page -->
+        <!-- Home -->
         <div id="home" class="page active">
             <section class="hero">
                 <h1>Welcome to AIMSPARK</h1>
-                <p>Your comprehensive solution for problem-solving, team collaboration, and project management</p>
+                <p>Your solution for collaboration and innovation</p>
             </section>
-
             <div class="feature-grid">
-                <div class="feature-card" onclick="showPage('problems')">
-                    <h3>🎯 Problem Statement</h3>
-                    <p>Explore and define challenging problems that need innovative solutions</p>
-                </div>
-                <div class="feature-card" onclick="showPage('team')">
-                    <h3>👥 Create Team</h3>
-                    <p>Build and manage your dream team for tackling complex challenges</p>
-                </div>
-                <div class="feature-card" onclick="showPage('dashboard')">
-                    <h3>📊 Dashboard</h3>
-                    <p>Monitor progress, track metrics, and visualize your project's success</p>
-                </div>
-                <!-- <div class="feature-card" onclick="showPage('admin')">
-                    <h3>⚙️ Admin Panel</h3>
-                    <p>Manage users, settings, and platform configurations with ease</p>
-                </div> -->
+                <div class="feature-card" onclick="showPage('problems')"> <h3>🎯 Problem Statement</h3><p>Explore and define challenging problems</p></div>
+                <div class="feature-card" onclick="showPage('instructions')"> <h3>📜 Instructions</h3><p>Know the rules before you code</p></div>
+                <div class="feature-card" onclick="showPage('team')"> <h3>👥 Create Team</h3><p>Build and manage your dream team</p></div>
+                <div class="feature-card" onclick="showPage('dashboard')"> <h3>📊 Dashboard</h3><p>Monitor progress and track metrics</p></div>
             </div>
         </div>
 
-        <!-- Problem Statement Page -->
-        <div id="problems" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Problem Statement</h1>
-                    <p>Identify, analyze, and define problems that drive innovation</p>
-                </div>
+        <!-- Problem Statements -->
+       <!-- Problem Statements -->
+    <div id="problems" class="page">
+      <h1>Problem Statements</h1>
 
-                <div class="problem-card">
-                    <h3>Current Challenge: Smart City Infrastructure</h3>
-                    <p><strong>Problem:</strong> Urban areas are struggling with traffic congestion, energy
-                        inefficiency, and waste management issues.</p>
-                    <p><strong>Impact:</strong> Affects 4.4 billion people living in urban areas worldwide, leading to
-                        economic losses and reduced quality of life.</p>
-                    <p><strong>Opportunity:</strong> Develop IoT-based solutions that can optimize traffic flow, reduce
-                        energy consumption by 30%, and improve waste collection efficiency.</p>
-                </div>
-
-                <div class="problem-card">
-                    <h3>Emerging Challenge: Digital Health Monitoring</h3>
-                    <p><strong>Problem:</strong> Remote health monitoring lacks precision and real-time intervention
-                        capabilities.</p>
-                    <p><strong>Impact:</strong> Limited access to continuous healthcare monitoring, especially in rural
-                        areas.</p>
-                    <p><strong>Opportunity:</strong> Create wearable devices with AI-powered health analytics for
-                        preventive healthcare.</p>
-                </div>
-
-                <div class="problem-card">
-                    <h3>Innovation Challenge: Sustainable Agriculture</h3>
-                    <p><strong>Problem:</strong> Climate change is affecting crop yields and food security globally.</p>
-                    <p><strong>Impact:</strong> Food production must increase by 70% by 2050 to feed the growing
-                        population.</p>
-                    <p><strong>Opportunity:</strong> Develop precision agriculture solutions using AI, sensors, and
-                        sustainable farming practices.</p>
-                </div>
-
-                <button class="btn" onclick="alert('Problem submission feature coming soon!')">Submit Problem
-                    Statement</button>
-            </div>
+      <div class="problem-section">
+        <h2>HealthTech</h2>
+        <div class="problem-card">
+          <h3>PSID: HT01 - Queflow</h3>
+          <p>A solution managing queuing models in OPDs, tracking bed occupancy, and enabling hospital admission workflows—scalable to city-level integration.</p>
         </div>
+        <div class="problem-card">
+          <h3>PSID: HT02 - Sign Language ↔ Audio-Visual Translator</h3>
+          <p>An AI-powered mobile tool that converts between Indian Sign Language (ISL) and audio-visual content (e.g., English/Hindi), improving accessibility for the deaf and mute.</p>
+        </div>
+      </div>
 
-        <!-- Create Team Page -->
+      <div class="problem-section">
+        <h2>EdTech (Smart Education)</h2>
+        <div class="problem-card">
+          <h3>PSID: EDT01 - Unified Curriculum Development Platform</h3>
+          <p>A collaborative portal for stakeholders (AICTE admins, curriculum developers) featuring dashboards, version control, discussion forums, and analytics around guideline compliance and curriculum creation.</p>
+        </div>
+        <div class="problem-card">
+          <h3>PSID: EDT02 - Mobile Education for Nomadic Communities</h3>
+          <p>A low-connectivity digital education solution for nomadic groups (e.g., Bakarwals, Gujjars), designed to function offline and support primary schooling under variable network conditions.</p>
+        </div>
+      </div>
+
+      <div class="problem-section">
+        <h2>FinTech</h2>
+        <div class="problem-card">
+          <h3>PSID: FT01 - Money Managment platform</h3>
+          <p>A workshop or app-driven solution to improve money management skills through engaging templates, point systems, and government/private sector collaborations.</p>
+        </div>
+        <div class="problem-card">
+          <h3>PSID: FT02 - Digital Split & Settle</h3>
+          <p>Friends, roommates, or colleagues often struggle to split bills (food, rent, travel, etc.) and keep track of who owes whom. Manual calculations usually create confusion.</p>
+        </div>
+      </div>
+
+      <div class="problem-section">
+        <h2>Innovation</h2>
+        <div class="problem-card">
+          <h3>PSID: SI01 - Smart Education</h3>
+          <p>Smart Education, a concept that describes learning in the digital age. It enables learners to learn more effectively, efficiently, flexibly, and comfortably.</p>
+        </div>
+        <div class="problem-card">
+          <h3>PSID: SI02 - Travel Connect & Grow</h3>
+          <p>A solution/idea that can boost the current situation of the tourism industry, including hotels, travel, and other related services.</p>
+        </div>
+      </div>
+    </div>
+
+
+        <!-- Instructions -->
+        <div id="instructions" class="page">
+  <h1 style="text-align: center; margin-bottom: 1.5rem;">🚀 Hackathon Instructions</h1>
+
+  <div style="
+    background: rgba(255, 255, 255, 0.15);
+    padding: 30px;
+    border-radius: 15px;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  ">
+
+    <!-- Prize and Certificates -->
+    <section style="margin-bottom: 2rem;">
+      <h2 style="border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 5px; margin-bottom: 10px;">🏆 Prizes & Certificates</h2>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>🥇 <strong>1st Place:</strong> ₹ 200 + Certificate</li>
+        <li>🥈 <strong>2nd & 3rd Place:</strong> Certificate</li>
+        <li>📄 <strong>All Participants:</strong> Digital Participation Certificate</li>
+      </ul>
+    </section>
+
+    <!-- General Guidelines -->
+    <section style="margin-bottom: 2rem;">
+      <h2 style="border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 5px; margin-bottom: 10px;">📌 General Guidelines</h2>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>✅ Each team must have <strong>2 to 4 members</strong>.</li>
+        <li>✅ Submit your project before the deadline.</li>
+        <li>✅ Members must use <strong>unique email IDs</strong>.</li>
+      </ul>
+    </section>
+
+    <!-- Development Rules -->
+    <section style="margin-bottom: 2rem;">
+      <h2 style="border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 5px; margin-bottom: 10px;">⚙️ Development Rules</h2>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>🛠️ Use any tech stack you’re comfortable with.</li>
+        <li>📚 Use of APIs and third-party libraries is allowed.</li>
+      </ul>
+    </section>
+
+    <!-- Judging Criteria -->
+    <section style="margin-bottom: 2rem;">
+      <h2 style="border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 5px; margin-bottom: 10px;">🔍 Judging Criteria</h2>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>💡 Innovation & Creativity</li>
+        <li>🧠 Technical Implementation</li>
+        <li>🎨 Presentation & UI/UX</li>
+        <li>🌍 Impact</li>
+      </ul>
+    </section>
+
+    <!-- Timeline -->
+    <section>
+      <h2 style="border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 5px; margin-bottom: 10px;">⏳ Timeline</h2>
+      <p style="font-size: 1.1rem;">
+        <strong>16th September 2025</strong><br>
+        <strong>Start:</strong> 2:00 PM<br>
+        <strong>End:</strong> 5:00 PM
+      </p>
+    </section>
+  </div>
+</div>
+
+
+
+        <!-- Team -->
         <div id="team" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Create Team</h1>
-                    <p>Build diverse, skilled teams to tackle complex challenges</p>
-                </div>
+            <h1>Create Team</h1>
+            <button class="btn" onclick="showTeamForm()">Create New Team</button>
+            <div id="teamFormContainer">
+                <h2>Team Registration</h2>
+                <input type="text" id="teamName" placeholder="Team Name" required>
+                <h2>Problem Statement</h2>
+                <select id="problemStatement" required>
+                    <option value="">Choose problem Statement </option>
+                    <option>PSID: HT01- Queflow</option>
+                    <option>PSID: HT02 - Sign Language ↔ Audio-Visual Translator</option>
+                    <option>PSID: EDT01 - Unified Curriculum Development Platform</option>
+                    <option>PSID: EDT02 - Mobile Education for Nomadic Communities</option>
+                    <option>PSID: FT01- Money Managment platform</option>
+                    <option>PSID: FT02 - Digital Split & Settle</option>
+                    <option>PSID: SI01 - Smart Education</option>
+                    <option>PSID: SI02- Travel Connect & Grow</option>
+                </select>
 
-                <div class="admin-section">
-                    <h3>Team Formation Tools</h3>
-                    <button class="btn" onclick="alert('Team creation wizard launched!')">Create New Team</button>
-                    <button class="btn" onclick="alert('Skill matching system activated!')">Find Team Members</button>
-                    <button class="btn" onclick="alert('Team collaboration tools ready!')">Manage Existing
-                        Teams</button>
-                </div>
-
-                <h3>Featured Team Members</h3>
-                <div class="team-grid">
-                    <div class="team-member">
-                        <div class="avatar">AJ</div>
-                        <h4>Alex Johnson</h4>
-                        <p>Full Stack Developer</p>
-                        <p>React, Node.js, Python</p>
-                    </div>
-                    <div class="team-member">
-                        <div class="avatar">SM</div>
-                        <h4>Sarah Miller</h4>
-                        <p>UI/UX Designer</p>
-                        <p>Figma, Adobe XD, Prototyping</p>
-                    </div>
-                    <div class="team-member">
-                        <div class="avatar">DW</div>
-                        <h4>David Wilson</h4>
-                        <p>Data Scientist</p>
-                        <p>Python, ML, Analytics</p>
-                    </div>
-                    <div class="team-member">
-                        <div class="avatar">EB</div>
-                        <h4>Emma Brown</h4>
-                        <p>Project Manager</p>
-                        <p>Agile, Scrum, Leadership</p>
-                    </div>
-                </div>
+                <h3>Member 1 (Required)</h3>
+                <input type="text" id="member1" placeholder="Name" required>
+                <input type="text" id="contact1" placeholder="Contact Number" required>
+                <input type="email" id="email1" placeholder="Email" required>
+                <input type="text" id="department1" placeholder="Department" required>
+                <select id="year1" required>
+                    <option value="">Select Year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Final Year</option>
+                </select>
+                <h3>Member 2 (Required)</h3>
+                <input type="text" id="member2" placeholder="Name" required>
+                <input type="text" id="contact2" placeholder="Contact Number" required>
+                <input type="email" id="email2" placeholder="Email" required>
+                <input type="text" id="department2" placeholder="Department" required>
+                <select id="year2" required>
+                    <option value="">Select Year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Final Year</option>
+                </select>
+                <h3>Member 3 (Optional)</h3>
+                <input type="text" id="member3" placeholder="Name">
+                <input type="text" id="contact3" placeholder="Contact Number">
+                <input type="email" id="email3" placeholder="Email">
+                <input type="text" id="department3" placeholder="Department">
+                <select id="year3">
+                    <option value="">Select Year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Final Year</option>
+                </select>
+                <h3>Member 4 (Optional)</h3>
+                <input type="text" id="member4" placeholder="Name">
+                <input type="text" id="contact4" placeholder="Contact Number">
+                <input type="email" id="email4" placeholder="Email">
+                <input type="text" id="department4" placeholder="Department">
+                <select id="year4">
+                    <option value="">Select Year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Final Year</option>
+                </select>
+                <button class="btn" onclick="createTeam()">Submit Team</button>
             </div>
         </div>
 
-        <!-- Dashboard Page -->
-        <div id="dashboard" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Team Dashboard</h1>
-                    <p>Monitor your team's progress, tasks, and collaboration metrics</p>
-                </div>
-
-                <!-- Team Overview Section -->
-                <div class="admin-section">
-                    <h3>🏆 Team: Innovation Squad</h3>
-                    <p><strong>Project:</strong> Smart City Infrastructure Solution</p>
-                    <p><strong>Team Lead:</strong> Emma Brown</p>
-                    <p><strong>Created:</strong> January 15, 2025</p>
-                    <p><strong>Deadline:</strong> March 30, 2025</p>
-                </div>
-
-                <!-- Team Metrics -->
-                <div class="dashboard-grid">
-                    <div class="dashboard-card">
-                        <h3>5</h3>
-                        <p>Team Members</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>12</h3>
-                        <p>Tasks Completed</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>75%</h3>
-                        <p>Project Progress</p>
-                    </div>
-                    <div class="dashboard-card">
-                        <h3>8</h3>
-                        <p>Days Remaining</p>
-                    </div>
-                </div>
-
-                <!-- Current Team Members -->
-                <div class="admin-section">
-                    <h3>👥 Current Team Members</h3>
-                    <div class="team-grid">
-                        <div class="team-member">
-                            <div class="avatar">EB</div>
-                            <h4>Emma Brown</h4>
-                            <p>Project Manager</p>
-                            <p><strong>Status:</strong> Online</p>
-                        </div>
-                        <div class="team-member">
-                            <div class="avatar">AJ</div>
-                            <h4>Alex Johnson</h4>
-                            <p>Full Stack Developer</p>
-                            <p><strong>Status:</strong> Working</p>
-                        </div>
-                        <div class="team-member">
-                            <div class="avatar">SM</div>
-                            <h4>Sarah Miller</h4>
-                            <p>UI/UX Designer</p>
-                            <p><strong>Status:</strong> Online</p>
-                        </div>
-                        <div class="team-member">
-                            <div class="avatar">DW</div>
-                            <h4>David Wilson</h4>
-                            <p>Data Scientist</p>
-                            <p><strong>Status:</strong> Offline</p>
-                        </div>
-                        <div class="team-member">
-                            <div class="avatar">MK</div>
-                            <h4>Mike Chen</h4>
-                            <p>Backend Developer</p>
-                            <p><strong>Status:</strong> Working</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Activity -->
-                <div class="admin-section">
-                    <h3>📋 Recent Team Activity</h3>
-                    <div class="activity-list">
-                        <div class="activity-item">
-                            <p><strong>Alex Johnson</strong> completed "API Integration" task</p>
-                            <small>2 hours ago</small>
-                        </div>
-                        <div class="activity-item">
-                            <p><strong>Sarah Miller</strong> uploaded new UI mockups</p>
-                            <small>4 hours ago</small>
-                        </div>
-                        <div class="activity-item">
-                            <p><strong>Emma Brown</strong> scheduled team meeting for tomorrow</p>
-                            <small>6 hours ago</small>
-                        </div>
-                        <div class="activity-item">
-                            <p><strong>David Wilson</strong> shared data analysis report</p>
-                            <small>1 day ago</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Team Actions -->
-                <div class="admin-section">
-                    <h3>🚀 Team Actions</h3>
-                    <button class="btn" onclick="alert('Opening team chat...')">Team Chat</button>
-                    <button class="btn" onclick="alert('Scheduling team meeting...')">Schedule Meeting</button>
-                    <button class="btn" onclick="alert('Creating new task...')">Add Task</button>
-                    <button class="btn" onclick="alert('Generating team report...')">Team Report</button>
-                    <button class="btn" onclick="alert('Inviting new member...')">Invite Member</button>
-                </div>
+            <!-- Dashboard -->
+            <div id="dashboard" class="page">
+                <h1>Team Dashboard</h1>
+                <div id="teamList">Your registered teams will appear here.</div>
             </div>
         </div>
 
-        <!-- Admin Panel Page
-        <div id="admin" class="page">
-            <div class="content-page">
-                <div class="page-header">
-                    <h1>Admin Panel</h1>
-                    <p>Manage platform settings, users, and system configurations</p>
-                </div>
-
-                <div class="admin-section">
-                    <h3>User Management</h3>
-                    <button class="btn" onclick="alert('User management system opened!')">Manage Users</button>
-                    <button class="btn" onclick="alert('Role assignment panel ready!')">Assign Roles</button>
-                    <button class="btn" onclick="alert('Permission settings configured!')">Set Permissions</button>
-                </div>
-
-                <div class="admin-section">
-                    <h3>System Settings</h3>
-                    <button class="btn" onclick="alert('Platform configuration updated!')">Platform Config</button>
-                    <button class="btn" onclick="alert('Security settings reviewed!')">Security Settings</button>
-                    <button class="btn" onclick="alert('Backup system activated!')">Backup & Restore</button>
-                </div>
-
-                <div class="admin-section">
-                    <h3>Analytics & Monitoring</h3>
-                    <button class="btn" onclick="alert('System logs accessed!')">View Logs</button>
-                    <button class="btn" onclick="alert('Performance metrics loaded!')">Performance Monitor</button>
-                    <button class="btn" onclick="alert('Analytics dashboard ready!')">Analytics Dashboard</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script>
-        
-        function showPage(pageId) {
-            // Hide all pages
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
+        const SUPABASE_URL = 'https://ulhjptxfzgsbepwtjqro.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A'; // Replace with actual key
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            // Show selected page
-            document.getElementById(pageId).classList.add('active');
+        let currentUser = null;
 
-            // Update active nav link
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-            });
+        async function checkSession() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            currentUser = session?.user || null;
+            updateUI(currentUser);
+        }
 
-            // Find and activate the corresponding nav link
-            const activeLink = document.querySelector(`[onclick="showPage('${pageId}')"].nav-link`);
-            if (activeLink) {
-                activeLink.classList.add('active');
+        function updateUI(user) {
+    document.getElementById("name").textContent = user ? "👋 " + (user.user_metadata?.full_name || user.email) : "Guest";
+
+    document.getElementById('teamLink').style.display = user ? 'block' : 'none';
+    document.getElementById('dashboardLink').style.display = user ? 'block' : 'none';
+    document.getElementById('instructionsLink').style.display = user ? 'block' : 'none';
+
+    const authLink = document.getElementById('authLink').querySelector('a');
+    if (user) {
+        authLink.textContent = 'Logout';
+    } else {
+        authLink.textContent = 'Login';
+    }
+}
+async function handleAuthClick() {
+    if (currentUser) {
+        await supabaseClient.auth.signOut();
+        currentUser = null;
+        updateUI(null);
+        window.location.href = 'login.html';
+    } else {
+        window.location.href = 'login.html';
+    }
+}
+
+
+
+        async function showPage(pageId) {
+            await checkSession();
+            const restrictedPages = ['team', 'dashboard', 'instructions'];
+            if (restrictedPages.includes(pageId) && !currentUser) {
+                alert('You must log in to access this page.');
+                window.location.href = 'login.html';
+                return;
             }
-
-            // Close mobile menu if open
-            const navLinksContainer = document.getElementById('navLinks');
-            navLinksContainer.classList.remove('show');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
+            document.getElementById('navLinks').classList.remove('show');
         }
 
         function toggleMenu() {
-            const navLinks = document.getElementById('navLinks');
-            navLinks.classList.toggle('show');
+            document.getElementById('navLinks').classList.toggle('show');
         }
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function (event) {
-            const nav = document.querySelector('nav');
-            const navLinks = document.getElementById('navLinks');
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            currentUser = null;
+            updateUI(null);
+            window.location.href = 'login.html';
+        }
 
-            if (!nav.contains(event.target)) {
-                navLinks.classList.remove('show');
-            }
-        });
+        function showTeamForm() {
+            document.getElementById('teamFormContainer').style.display = 'block';
+        }
 
-        // Add some interactive animations
-        document.addEventListener('DOMContentLoaded', function () {
-            // Animate feature cards on load
-            const featureCards = document.querySelectorAll('.feature-card');
-            featureCards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.style.animation = 'fadeIn 0.6s ease-in forwards';
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script>
-  const SUPABASE_URL = 'https://ulhjptxfzgsbepwtjqro.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A';
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+       async function createTeam() {
+  if (!currentUser) {
+    alert('You must log in first!');
+    return;
+  }
 
-  async function loadUser() {
-    const { data: { user } } = await supabaseClient.auth.getUser();
+  const teamName = document.getElementById('teamName').value.trim();
+  const problemStatement = document.getElementById('problemStatement').value.trim(); // ✅ Added
+  const members = [];
 
-    if (user) {
-      const username = user.user_metadata?.full_name || "";
-      document.getElementById("name").textContent = "👋 " + username;
-    } else {
-      document.getElementById("name").textContent = "Guest";
+  for (let i = 1; i <= 4; i++) {
+    const name = document.getElementById(`member${i}`).value.trim();
+    const contact = document.getElementById(`contact${i}`).value.trim();
+    const email = document.getElementById(`email${i}`).value.trim();
+    const dept = document.getElementById(`department${i}`).value.trim();
+    const year = document.getElementById(`year${i}`).value;
+
+    if (name) {
+      members.push({ name, contact, email, dept, year });
     }
   }
 
-  loadUser();
-</script>
+  if (!teamName || !problemStatement || members.length < 2) {
+    alert('Please provide team name, problem statement, and at least 2 members.');
+    return;
+  }
 
+  // ✅ Step 1: check if user already has a team
+  const { data: existingTeams, error: checkError } = await supabaseClient
+    .from('teams')
+    .select('*')
+    .eq('user_id', currentUser.id);
+
+  if (checkError) {
+    alert("Error checking existing team: " + checkError.message);
+    return;
+  }
+
+  if (existingTeams && existingTeams.length > 0) {
+    alert("You have already created a team. Only one team is allowed!");
+    return;
+  }
+
+  // ✅ Step 2: get the latest ID for TeamSpark
+  const { data: lastTeam, error: lastError } = await supabaseClient
+    .from('teams')
+    .select('id')
+    .order('id', { ascending: false })
+    .limit(1);
+
+  if (lastError) {
+    alert("Error fetching last team ID: " + lastError.message);
+    return;
+  }
+
+  let nextId = 1;
+  if (lastTeam && lastTeam.length > 0) {
+    nextId = lastTeam[0].id + 1;
+  }
+
+  const teamId = "TeamSpark" + String(nextId).padStart(3, '0'); // e.g. TeamSpark001
+
+  // ✅ Step 3: insert new team
+  const { error } = await supabaseClient.from('teams').insert([
+    {
+      team_id: teamId,
+      team_name: teamName,
+      problem_statement: problemStatement, // ✅ included here
+      members: members,
+      user_id: currentUser.id,
+    },
+  ]);
+
+  if (error) {
+    alert('Error creating team: ' + error.message);
+  } else {
+    alert('Team created successfully! ID: ' + teamId);
+    document.getElementById('teamFormContainer').style.display = 'none';
+    document.querySelector("button[onclick='showTeamForm()']").style.display = 'none'; // hide button
+    loadTeams(); // refresh dashboard
+  }
+}
+
+
+
+async function loadTeams() {
+  if (!currentUser) return;
+
+  const { data: teams, error } = await supabaseClient
+    .from('teams')
+    .select('*')
+    .eq('user_id', currentUser.id);
+
+  const teamList = document.getElementById('teamList');
+
+  if (error) {
+    teamList.innerHTML = '<p style="color: red;">Error loading teams.</p>';
+    return;
+  }
+
+  if (!teams || teams.length === 0) {
+    teamList.innerHTML = '<p>No teams found. Create a new team first.</p>';
+    return;
+  }
+
+  const team = teams[0];
+
+  let html = `
+    <div style="background: #f4f4f4; color: #333; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+      <h2 style="margin-bottom: 10px;">${team.team_name} <span style="font-size: 14px; color: #666;">(${team.team_id})</span></h2>
+      <h3>Problem Statement:</h3>
+      <p style="background: #fff; padding: 10px; border-radius: 5px; color: #000;">${team.problem_statement || 'N/A'}</p>
+      <h3>Team Members:</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
+  `;
+
+  team.members.forEach((member, index) => {
+    html += `
+      <div style="
+        flex: 1 1 220px;
+        background: white;
+        color: #333;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      ">
+        <h4 style="margin-bottom: 5px;">👤 ${member.name}</h4>
+        <p style="margin: 5px 0;"><strong>Email:</strong> ${member.email}</p>
+        <p style="margin: 5px 0;"><strong>Contact:</strong> ${member.contact}</p>
+        <p style="margin: 5px 0;"><strong>Department:</strong> ${member.dept}</p>
+        <p style="margin: 5px 0;"><strong>Year:</strong> ${member.year}</p>
+      </div>
+    `;
+  });
+
+  html += `</div></div>`;
+
+  teamList.innerHTML = html;
+
+  // ✅ Hide create team button
+  const createBtn = document.querySelector("button[onclick='showTeamForm()']");
+  if (createBtn) createBtn.style.display = 'none';
+}
+
+
+
+
+        checkSession();
+    </script>
 </body>
-
 </html>

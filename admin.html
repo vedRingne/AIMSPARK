@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AIMSPARK Admin Panel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background: #031048;
+      color: #fff;
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logout-btn {
+      background: #764ba2;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .logout-btn:hover {
+      background: #667eea;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #031048;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #031048;
+      color: white;
+    }
+
+    tr:not(:last-child) {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .member-card {
+      background: #f4f6fc;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .member-card strong {
+      color: #031048;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th {
+        position: sticky;
+        top: 0;
+        background: #031048;
+        z-index: 2;
+      }
+
+      td {
+        border-bottom: 1px solid #ddd;
+        padding: 10px;
+      }
+
+      tr {
+        margin-bottom: 1rem;
+        background: white;
+        border-radius: 8px;
+        padding: 1rem;
+      }
+
+      .member-card {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    AIMSPARK Admin Panel
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="container">
+    <h1>Registered Teams</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Team ID</th>
+          <th>Team Name</th>
+          <th>Members</th>
+        </tr>
+      </thead>
+      <tbody id="teamTable">
+        <tr><td colspan="3">Loading teams...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const SUPABASE_URL = "https://ulhjptxfzgsbepwtjqro.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVsaGpwdHhmemdzYmVwd3RqcXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyMTYyMjgsImV4cCI6MjA3Mjc5MjIyOH0.gSRuXu_4z4AcEqSK-HDpHaNeuQ_R74cvqnfg_T75U-A";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function loadAllTeams() {
+      const { data: teams, error } = await supabaseClient
+        .from("teams")
+        .select("*");
+
+      const teamTable = document.getElementById("teamTable");
+
+      if (error) {
+        teamTable.innerHTML = `<tr><td colspan="3">Error: ${error.message}</td></tr>`;
+        return;
+      }
+
+      if (!teams || teams.length === 0) {
+        teamTable.innerHTML = "<tr><td colspan='3'>No teams registered yet.</td></tr>";
+        return;
+      }
+
+      let rows = "";
+      teams.forEach(team => {
+        let membersHtml = "";
+        team.members.forEach(m => {
+          membersHtml += `
+            <div class="member-card">
+              <strong>${m.name}</strong><br>
+              <span>${m.email}</span><br>
+              <span>${m.contact}</span><br>
+              <span>${m.dept}, Year ${m.year}</span>
+            </div>
+          `;
+        });
+
+        rows += `
+          <tr>
+            <td><strong>${team.team_id}</strong></td>
+            <td>${team.team_name}</td>
+            <td>${membersHtml}</td>
+          </tr>
+        `;
+      });
+
+      teamTable.innerHTML = rows;
+    }
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      window.location.href = "login.html";
+    }
+
+    loadAllTeams();
+  </script>
+</body>
+</html>
